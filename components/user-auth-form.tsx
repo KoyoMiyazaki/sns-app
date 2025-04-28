@@ -10,6 +10,7 @@ import { useState } from "react";
 import { toast } from "sonner";
 import { AlertCircle } from "lucide-react";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { successStyle } from "@/lib/toast-style";
 
 export default function UserAuthForm() {
   const [email, setEmail] = useState<string>("");
@@ -35,7 +36,9 @@ export default function UserAuthForm() {
         return;
       }
 
-      toast.success("確認メールを送信しました。メールをご確認ください！");
+      toast.success("確認メールを送信しました。メールをご確認ください！", {
+        style: successStyle,
+      });
     } else {
       const { error } = await supabase.auth.signInWithPassword({
         email,
@@ -47,7 +50,7 @@ export default function UserAuthForm() {
         return;
       }
 
-      toast.success("ログインに成功しました！");
+      toast.success("ログインに成功しました！", { style: successStyle });
       router.push("/feed");
     }
   };
