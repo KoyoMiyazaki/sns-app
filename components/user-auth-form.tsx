@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { supabase } from "@/lib/supabase-client";
 import { cn } from "@/lib/utils";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "sonner";
 import { AlertCircle } from "lucide-react";
@@ -16,6 +16,7 @@ export default function UserAuthForm() {
   const [password, setPassword] = useState<string>("");
   const [errorMessage, setErrorMessage] = useState<string>("");
   const pathname = usePathname();
+  const router = useRouter();
 
   const isSignup = pathname === "/signup";
   const buttonText = isSignup
@@ -24,7 +25,7 @@ export default function UserAuthForm() {
 
   const handleClick = async () => {
     if (isSignup) {
-      const { data, error } = await supabase.auth.signUp({
+      const { error } = await supabase.auth.signUp({
         email,
         password,
       });
@@ -36,7 +37,18 @@ export default function UserAuthForm() {
 
       toast.success("確認メールを送信しました。メールをご確認ください！");
     } else {
-      console.log("login form");
+      const { error } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      });
+
+      if (error) {
+        setErrorMessage(error.message);
+        return;
+      }
+
+      toast.success("ログインに成功しました！");
+      router.push("/feed");
     }
   };
 
