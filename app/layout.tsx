@@ -5,7 +5,10 @@ import "./globals.css";
 const fontNotoSansJP = Noto_Sans_JP({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "MySNS",
+  title: {
+    default: "MySNS",
+    template: `%s | MySNS`,
+  },
   description: "SNSアプリケーションです。",
 };
 
