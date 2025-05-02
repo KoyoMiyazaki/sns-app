@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { supabase } from "@/lib/supabase-client";
 import { cn } from "@/lib/utils";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
 import { toast } from "sonner";
 import { AlertCircle } from "lucide-react";
@@ -18,6 +18,8 @@ export default function UserAuthForm() {
   const [errorMessage, setErrorMessage] = useState<string>("");
   const pathname = usePathname();
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const redirect = searchParams.get("redirect") || "/feed";
 
   const isSignup = pathname === "/signup";
   const buttonText = isSignup
@@ -51,7 +53,7 @@ export default function UserAuthForm() {
       }
 
       toast.success("ログインに成功しました！", { style: successStyle });
-      router.push("/feed");
+      router.push(redirect);
     }
   };
 
