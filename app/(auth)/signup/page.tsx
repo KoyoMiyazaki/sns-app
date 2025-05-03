@@ -1,4 +1,4 @@
-import UserAuthForm from "@/components/user-auth-form";
+import UserAuthForm from "@/app/(auth)/_components/user-auth-form";
 import { Metadata } from "next";
 import Link from "next/link";
 
