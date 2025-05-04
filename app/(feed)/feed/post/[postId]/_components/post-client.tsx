@@ -1,5 +1,6 @@
 "use client";
 
+import PostSkeleton from "@/components/post-skeleton";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { ChevronLeft } from "lucide-react";
@@ -45,14 +46,6 @@ export default function PostClient({ postId }: PostClientProps) {
     fetchPost();
   }, [postId]);
 
-  if (loading) {
-    return <p className="text-center mt-10">読み込み中...</p>;
-  }
-
-  if (!post) {
-    return <p className="text-red-500">投稿が見つかりませんでした。</p>;
-  }
-
   return (
     <div className="flex flex-col gap-8 w-[350px] md:w-[400px]">
       <Link href={"/feed"}>
@@ -67,13 +60,15 @@ export default function PostClient({ postId }: PostClientProps) {
         </Button>
       </Link>
       <h1 className="text-2xl font-bold">投稿詳細</h1>
-      <div className="space-y-4">
-        <div key={post.id} className="space-y-2 border p-4 rounded-md">
-          <p className="font-bold">{post.username}</p>
-          <p>{post.content}</p>
-          <p className="text-sm text-muted-foreground">{post.createdAt}</p>
+      {loading ? (
+        <PostSkeleton />
+      ) : (
+        <div key={post?.id} className="space-y-2 border p-4 rounded-md">
+          <p className="font-bold">{post?.username}</p>
+          <p>{post?.content}</p>
+          <p className="text-sm text-muted-foreground">{post?.createdAt}</p>
         </div>
-      </div>
+      )}
     </div>
   );
 }

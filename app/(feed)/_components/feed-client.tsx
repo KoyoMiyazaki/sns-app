@@ -5,6 +5,7 @@ import Link from "next/link";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { Plus } from "lucide-react";
+import PostSkeleton from "@/components/post-skeleton";
 
 interface Post {
   id: string;
@@ -15,6 +16,7 @@ interface Post {
 
 export default function FeedClient() {
   const [posts, setPosts] = useState<Post[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
     const fetchPosts = async () => {
@@ -24,6 +26,8 @@ export default function FeedClient() {
         setPosts(data);
       } catch (error) {
         console.log("投稿取得エラー", error);
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -43,17 +47,27 @@ export default function FeedClient() {
           </Button>
         </Link>
       </div>
-      <div className="flex flex-col gap-4">
-        {posts.map((post) => (
-          <Link key={post.id} href={`/feed/post/${post.id}`}>
-            <div className="space-y-2 border p-4 rounded-md">
-              <p className="font-bold">{post.username}</p>
-              <p>{post.content}</p>
-              <p className="text-sm text-muted-foreground">{post.createdAt}</p>
-            </div>
-          </Link>
-        ))}
-      </div>
+      {loading ? (
+        <div className="space-y-4">
+          {Array.from({ length: 3 }).map((_, i) => (
+            <PostSkeleton key={i} />
+          ))}
+        </div>
+      ) : (
+        <div className="flex flex-col gap-4">
+          {posts.map((post) => (
+            <Link key={post.id} href={`/feed/post/${post.id}`}>
+              <div className="space-y-2 border p-4 rounded-md">
+                <p className="font-bold">{post.username}</p>
+                <p>{post.content}</p>
+                <p className="text-sm text-muted-foreground">
+                  {post.createdAt}
+                </p>
+              </div>
+            </Link>
+          ))}
+        </div>
+      )}
     </div>
   );
 }
