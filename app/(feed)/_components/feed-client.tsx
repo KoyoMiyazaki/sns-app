@@ -7,13 +7,7 @@ import { cn } from "@/lib/utils";
 import { Plus } from "lucide-react";
 import PostSkeleton from "@/components/post-skeleton";
 import PostCard from "@/components/post-card";
-
-interface Post {
-  id: string;
-  username: string;
-  content: string;
-  createdAt: string;
-}
+import { Post } from "@/types/post";
 
 export default function FeedClient() {
   const [posts, setPosts] = useState<Post[]>([]);

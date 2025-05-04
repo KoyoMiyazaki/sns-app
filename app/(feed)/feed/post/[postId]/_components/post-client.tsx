@@ -4,16 +4,10 @@ import PostCard from "@/components/post-card";
 import PostSkeleton from "@/components/post-skeleton";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { Post } from "@/types/post";
 import { ChevronLeft } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-
-interface Post {
-  id: string;
-  username: string;
-  content: string;
-  createdAt: string;
-}
 
 interface PostClientProps {
   postId: string;

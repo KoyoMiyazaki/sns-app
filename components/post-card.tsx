@@ -1,9 +1,4 @@
-interface Post {
-  id: string;
-  username: string;
-  content: string;
-  createdAt: string;
-}
+import { Post } from "@/types/post";
 
 interface PostCardProps {
   post: Post;
