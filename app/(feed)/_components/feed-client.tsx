@@ -2,6 +2,9 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import { Button, buttonVariants } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
+import { Plus } from "lucide-react";
 
 interface Post {
   id: string;
@@ -29,7 +32,17 @@ export default function FeedClient() {
 
   return (
     <div className="flex flex-col gap-8 w-[350px] md:w-[400px]">
-      <h1 className="text-2xl font-bold">投稿一覧</h1>
+      <div className="flex justify-between items-center">
+        <h1 className="text-2xl font-bold">投稿一覧</h1>
+        <Link href={"/feed/new"}>
+          <Button
+            className={cn(buttonVariants({ size: "sm" }), "cursor-pointer")}
+          >
+            <Plus />
+            新規投稿
+          </Button>
+        </Link>
+      </div>
       <div className="flex flex-col gap-4">
         {posts.map((post) => (
           <Link key={post.id} href={`/feed/post/${post.id}`}>
