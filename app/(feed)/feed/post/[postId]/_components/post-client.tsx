@@ -8,6 +8,7 @@ import { Post } from "@/types/post";
 import { ChevronLeft } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import Comments from "./comments";
 
 interface PostClientProps {
   postId: string;
@@ -56,6 +57,7 @@ export default function PostClient({ postId }: PostClientProps) {
       </Link>
       <h1 className="text-2xl font-bold">投稿詳細</h1>
       {loading ? <PostSkeleton /> : <PostCard post={post!} />}
+      <Comments postId={postId} />
     </div>
   );
 }
