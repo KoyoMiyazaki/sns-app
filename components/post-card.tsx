@@ -14,7 +14,9 @@ export default function PostCard({ post }: PostCardProps) {
     <div className="space-y-2 border p-4 rounded-md">
       <p className="font-bold">{post.username}</p>
       <p>{post.content}</p>
-      <p className="text-sm text-muted-foreground">{post.createdAt}</p>
+      <p className="text-sm text-muted-foreground">
+        {new Date(post.createdAt).toLocaleString()}
+      </p>
     </div>
   );
 }
