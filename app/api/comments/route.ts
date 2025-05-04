@@ -1,5 +1,29 @@
 import prisma from "@/lib/prisma";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
+
+export async function GET(req: NextRequest) {
+  const { searchParams } = new URL(req.url);
+  const postId = searchParams.get("postId");
+
+  if (!postId) {
+    return NextResponse.json({ error: "postIdは必要です" }, { status: 400 });
+  }
+
+  try {
+    const comments = await prisma.comment.findMany({
+      where: { postId },
+      orderBy: { createdAt: "desc" },
+    });
+
+    return NextResponse.json(comments);
+  } catch (error) {
+    console.error("コメント取得失敗:", error);
+    return NextResponse.json(
+      { error: "コメントの取得に失敗しました" },
+      { status: 500 }
+    );
+  }
+}
 
 export async function POST(req: Request) {
   const { postId, username, content } = await req.json();
