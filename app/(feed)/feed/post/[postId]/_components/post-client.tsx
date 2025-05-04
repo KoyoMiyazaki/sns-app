@@ -1,5 +1,6 @@
 "use client";
 
+import PostCard from "@/components/post-card";
 import PostSkeleton from "@/components/post-skeleton";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -60,15 +61,7 @@ export default function PostClient({ postId }: PostClientProps) {
         </Button>
       </Link>
       <h1 className="text-2xl font-bold">投稿詳細</h1>
-      {loading ? (
-        <PostSkeleton />
-      ) : (
-        <div key={post?.id} className="space-y-2 border p-4 rounded-md">
-          <p className="font-bold">{post?.username}</p>
-          <p>{post?.content}</p>
-          <p className="text-sm text-muted-foreground">{post?.createdAt}</p>
-        </div>
-      )}
+      {loading ? <PostSkeleton /> : <PostCard post={post!} />}
     </div>
   );
 }

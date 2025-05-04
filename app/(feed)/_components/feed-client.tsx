@@ -6,6 +6,7 @@ import { Button, buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { Plus } from "lucide-react";
 import PostSkeleton from "@/components/post-skeleton";
+import PostCard from "@/components/post-card";
 
 interface Post {
   id: string;
@@ -57,13 +58,7 @@ export default function FeedClient() {
         <div className="flex flex-col gap-4">
           {posts.map((post) => (
             <Link key={post.id} href={`/feed/post/${post.id}`}>
-              <div className="space-y-2 border p-4 rounded-md">
-                <p className="font-bold">{post.username}</p>
-                <p>{post.content}</p>
-                <p className="text-sm text-muted-foreground">
-                  {post.createdAt}
-                </p>
-              </div>
+              <PostCard post={post} />
             </Link>
           ))}
         </div>
