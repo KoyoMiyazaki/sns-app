@@ -9,8 +9,19 @@ datasource db {
 }
 
 model Post {
+  id        String    @id @default(cuid())
+  username  String
+  content   String
+  createdAt DateTime  @default(now())
+  comments  Comment[]
+}
+
+model Comment {
   id        String   @id @default(cuid())
+  postId    String
   username  String
   content   String
   createdAt DateTime @default(now())
+
+  post Post @relation(fields: [postId], references: [id])
 }
