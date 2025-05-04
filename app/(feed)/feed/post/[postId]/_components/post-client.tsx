@@ -1,5 +1,9 @@
 "use client";
 
+import { Button, buttonVariants } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
+import { ChevronLeft } from "lucide-react";
+import Link from "next/link";
 import { useEffect, useState } from "react";
 
 interface Post {
@@ -51,6 +55,17 @@ export default function PostClient({ postId }: PostClientProps) {
 
   return (
     <div className="flex flex-col gap-8 w-[350px] md:w-[400px]">
+      <Link href={"/feed"}>
+        <Button
+          className={cn(
+            buttonVariants({ variant: "secondary", size: "sm" }),
+            "cursor-pointer"
+          )}
+        >
+          <ChevronLeft />
+          戻る
+        </Button>
+      </Link>
       <h1 className="text-2xl font-bold">投稿詳細</h1>
       <div className="space-y-4">
         <div key={post.id} className="space-y-2 border p-4 rounded-md">

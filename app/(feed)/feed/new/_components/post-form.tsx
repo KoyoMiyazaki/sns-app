@@ -6,6 +6,8 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { errorStyle, successStyle } from "@/lib/toast-style";
 import { cn } from "@/lib/utils";
+import { ChevronLeft } from "lucide-react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import { toast } from "sonner";
@@ -43,6 +45,17 @@ export default function PostForm() {
       onSubmit={handleSubmit}
       className="flex flex-col gap-8 w-[350px] md:w-[450px]"
     >
+      <Link href={"/feed"}>
+        <Button
+          className={cn(
+            buttonVariants({ variant: "secondary", size: "sm" }),
+            "cursor-pointer"
+          )}
+        >
+          <ChevronLeft />
+          戻る
+        </Button>
+      </Link>
       <h1 className="text-2xl font-bold">新規投稿</h1>
       <div className="flex flex-col gap-4">
         <div className="space-y-2">
