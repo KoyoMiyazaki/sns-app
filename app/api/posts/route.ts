@@ -1,12 +1,21 @@
+import { PAGE_SIZE } from "@/constants/pagination";
 import prisma from "@/lib/prisma";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
-export async function GET() {
+export async function GET(req: NextRequest) {
+  const { searchParams } = new URL(req.url);
+  const page = parseInt(searchParams.get("page") || "1", 10);
+  const skip = (page - 1) * PAGE_SIZE;
+
   const posts = await prisma.post.findMany({
     orderBy: { createdAt: "desc" },
+    skip,
+    take: PAGE_SIZE,
   });
 
-  return Response.json(posts);
+  const total = await prisma.post.count();
+
+  return Response.json({ posts, total });
 }
 
 export async function POST(req: Request) {
