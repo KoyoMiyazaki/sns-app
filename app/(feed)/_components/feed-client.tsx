@@ -8,17 +8,24 @@ import { Plus } from "lucide-react";
 import PostSkeleton from "@/components/post-skeleton";
 import PostCard from "@/components/post-card";
 import { Post } from "@/types/post";
+import { useSearchParams } from "next/navigation";
+import PaginationControls from "@/components/pagination-controls";
+import { PAGE_SIZE } from "@/constants/pagination";
 
 export default function FeedClient() {
   const [posts, setPosts] = useState<Post[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
+  const [totalPages, setTotalPages] = useState<number>(1);
+  const searchParams = useSearchParams();
+  const page = parseInt(searchParams.get("page") || "1", 10);
 
   useEffect(() => {
     const fetchPosts = async () => {
       try {
-        const res = await fetch("/api/posts");
+        const res = await fetch(`/api/posts?page=${page}`);
         const data = await res.json();
-        setPosts(data);
+        setPosts(data.posts);
+        setTotalPages(Math.ceil(parseInt(data.total, 10) / PAGE_SIZE));
       } catch (error) {
         console.log("投稿取得エラー", error);
       } finally {
@@ -49,13 +56,16 @@ export default function FeedClient() {
           ))}
         </div>
       ) : (
-        <div className="flex flex-col gap-4">
-          {posts.map((post) => (
-            <Link key={post.id} href={`/feed/post/${post.id}`}>
-              <PostCard post={post} />
-            </Link>
-          ))}
-        </div>
+        <>
+          <div className="flex flex-col gap-4">
+            {posts.map((post) => (
+              <Link key={post.id} href={`/feed/post/${post.id}`}>
+                <PostCard post={post} />
+              </Link>
+            ))}
+          </div>
+          <PaginationControls currentPage={page} totalPages={totalPages} />
+        </>
       )}
     </div>
   );
