@@ -13,6 +13,7 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { successStyle } from "@/lib/toast-style";
 
 export default function UserAuthForm() {
+  const [username, setUsername] = useState<string>("");
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [errorMessage, setErrorMessage] = useState<string>("");
@@ -28,9 +29,15 @@ export default function UserAuthForm() {
 
   const handleClick = async () => {
     if (isSignup) {
+      // サインアップ処理
       const { error } = await supabase.auth.signUp({
         email,
         password,
+        options: {
+          data: {
+            username,
+          },
+        },
       });
 
       if (error) {
@@ -42,6 +49,7 @@ export default function UserAuthForm() {
         style: successStyle,
       });
     } else {
+      // ログイン処理
       const { error } = await supabase.auth.signInWithPassword({
         email,
         password,
@@ -67,6 +75,16 @@ export default function UserAuthForm() {
         </Alert>
       )}
       <div className="space-y-2">
+        <Label htmlFor="username">ユーザー名</Label>
+        <Input
+          id="username"
+          type="text"
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
+          autoFocus
+        />
+      </div>
+      <div className="space-y-2">
         <Label htmlFor="email">メールアドレス</Label>
         <Input
           id="email"
@@ -74,7 +92,6 @@ export default function UserAuthForm() {
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           placeholder="name@example.com"
-          autoFocus
         />
       </div>
       <div className="space-y-2">
