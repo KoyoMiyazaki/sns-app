@@ -11,6 +11,11 @@ export async function GET(req: NextRequest) {
     orderBy: { createdAt: "desc" },
     skip,
     take: PAGE_SIZE,
+    include: {
+      _count: {
+        select: { comments: true },
+      },
+    },
   });
 
   const total = await prisma.post.count();
