@@ -4,3 +4,9 @@ export interface Post {
   content: string;
   createdAt: string;
 }
+
+export interface PostWithCommentCount extends Post {
+  _count: {
+    comments: number;
+  };
+}

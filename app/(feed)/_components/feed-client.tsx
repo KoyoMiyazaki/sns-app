@@ -7,13 +7,13 @@ import { cn } from "@/lib/utils";
 import { Plus } from "lucide-react";
 import PostSkeleton from "@/components/post-skeleton";
 import PostCard from "@/components/post-card";
-import { Post } from "@/types/post";
+import { PostWithCommentCount } from "@/types/post";
 import { useSearchParams } from "next/navigation";
 import PaginationControls from "@/components/pagination-controls";
 import { PAGE_SIZE } from "@/constants/pagination";
 
 export default function FeedClient() {
-  const [posts, setPosts] = useState<Post[]>([]);
+  const [posts, setPosts] = useState<PostWithCommentCount[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [totalPages, setTotalPages] = useState<number>(1);
   const searchParams = useSearchParams();
@@ -27,7 +27,7 @@ export default function FeedClient() {
         setPosts(data.posts);
         setTotalPages(Math.ceil(parseInt(data.total, 10) / PAGE_SIZE));
       } catch (error) {
-        console.log("投稿取得エラー", error);
+        console.error("投稿取得エラー", error);
       } finally {
         setLoading(false);
       }
@@ -60,7 +60,7 @@ export default function FeedClient() {
           <div className="flex flex-col gap-4">
             {posts.map((post) => (
               <Link key={post.id} href={`/feed/post/${post.id}`}>
-                <PostCard post={post} />
+                <PostCard post={post} totalComments={post._count?.comments} />
               </Link>
             ))}
           </div>
