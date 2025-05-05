@@ -74,16 +74,18 @@ export default function UserAuthForm() {
           <AlertDescription>{errorMessage}</AlertDescription>
         </Alert>
       )}
-      <div className="space-y-2">
-        <Label htmlFor="username">ユーザー名</Label>
-        <Input
-          id="username"
-          type="text"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-          autoFocus
-        />
-      </div>
+      {isSignup && (
+        <div className="space-y-2">
+          <Label htmlFor="username">ユーザー名</Label>
+          <Input
+            id="username"
+            type="text"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            autoFocus
+          />
+        </div>
+      )}
       <div className="space-y-2">
         <Label htmlFor="email">メールアドレス</Label>
         <Input
