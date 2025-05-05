@@ -1,9 +1,9 @@
 "use client";
 
 import { Button, buttonVariants } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { supabase } from "@/lib/supabase-client";
 import { errorStyle, successStyle } from "@/lib/toast-style";
 import { cn } from "@/lib/utils";
 import { ChevronLeft } from "lucide-react";
@@ -13,12 +13,14 @@ import React, { useState } from "react";
 import { toast } from "sonner";
 
 export default function PostForm() {
-  const [username, setUsername] = useState<string>("");
   const [content, setContent] = useState<string>("");
   const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    const { data: userData } = await supabase.auth.getUser();
+    const username = userData.user?.user_metadata.username;
 
     const res = await fetch("/api/posts", {
       method: "POST",
@@ -34,7 +36,7 @@ export default function PostForm() {
       });
       router.push("/feed");
     } else {
-      toast.error("投稿しました！", {
+      toast.error("投稿できませんでした", {
         style: errorStyle,
       });
     }
@@ -58,16 +60,6 @@ export default function PostForm() {
       </Link>
       <h1 className="text-2xl font-bold">新規投稿</h1>
       <div className="flex flex-col gap-4">
-        <div className="space-y-2">
-          <Label htmlFor="username">ユーザー名</Label>
-          <Input
-            id="username"
-            type="text"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-            autoFocus
-          />
-        </div>
         <div className="space-y-2">
           <Label htmlFor="content">内容</Label>
           <Textarea
