@@ -5,10 +5,13 @@ import PostSkeleton from "@/components/post-skeleton";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { Post } from "@/types/post";
-import { ChevronLeft } from "lucide-react";
+import { ChevronLeft, Heart } from "lucide-react";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import Comments from "./comments";
+import { supabase } from "@/lib/supabase-client";
+import { toast } from "sonner";
+import { errorStyle, successStyle } from "@/lib/toast-style";
 
 interface PostClientProps {
   postId: string;
@@ -16,6 +19,7 @@ interface PostClientProps {
 
 export default function PostClient({ postId }: PostClientProps) {
   const [post, setPost] = useState<Post | null>(null);
+  const [isLiked, setIsLiked] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
 
@@ -39,8 +43,75 @@ export default function PostClient({ postId }: PostClientProps) {
       }
     };
 
+    const fetchLikeStatus = async () => {
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+      if (!user) return;
+
+      const res = await fetch("/api/likes/status", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ userId: user.id, postIds: [postId] }),
+      });
+
+      const likedPostIds: string[] = await res.json();
+      setIsLiked(likedPostIds.includes(postId));
+    };
+
     fetchPost();
+    fetchLikeStatus();
   }, [postId]);
+
+  const handleLikeToggle = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    const toastPrefixText = isLiked ? "いいね解除" : "いいね";
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+
+    if (!user) {
+      toast.error(`${toastPrefixText}できませんでした`, {
+        style: errorStyle,
+      });
+      return;
+    }
+
+    let res;
+    if (isLiked) {
+      // いいね解除処理
+      res = await fetch("/api/likes", {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ postId, userId: user.id }),
+      });
+    } else {
+      // いいね処理
+      res = await fetch("/api/likes", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ postId, userId: user.id }),
+      });
+    }
+
+    if (!res.ok) {
+      toast.error(`${toastPrefixText}できませんでした`, {
+        style: errorStyle,
+      });
+      return;
+    }
+
+    setIsLiked(!isLiked);
+
+    toast.success(`${toastPrefixText}しました！`, {
+      style: successStyle,
+    });
+  };
 
   return (
     <div className="flex flex-col gap-8 w-[350px] md:w-[400px]">
@@ -57,6 +128,20 @@ export default function PostClient({ postId }: PostClientProps) {
       </Link>
       <h1 className="text-2xl font-bold">投稿詳細</h1>
       {loading ? <PostSkeleton /> : <PostCard post={post!} />}
+      <Button
+        onClick={handleLikeToggle}
+        className={cn(
+          buttonVariants({ variant: "outline" }),
+          isLiked ? "text-accent-foreground" : "text-muted-foreground"
+        )}
+      >
+        <Heart
+          className={cn(
+            isLiked ? "text-red-500 fill-red-500" : "text-gray-400"
+          )}
+        />
+        <span>{isLiked ? "いいね済み" : "いいね！"}</span>
+      </Button>
       <Comments postId={postId} />
     </div>
   );
