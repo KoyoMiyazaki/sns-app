@@ -23,7 +23,9 @@ export default function RootLayout({
     <html lang="ja">
       <body className={`${fontNotoSansJP.className} antialiased min-h-screen`}>
         <Header />
-        <div className="pt-12">{children}</div>
+        <main className="flex flex-col items-center gap-4 justify-center min-h-screen pt-12">
+          {children}
+        </main>
         <Toaster />
       </body>
     </html>
