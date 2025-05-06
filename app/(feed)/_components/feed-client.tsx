@@ -11,9 +11,11 @@ import { PostWithCommentCount } from "@/types/post";
 import { useSearchParams } from "next/navigation";
 import PaginationControls from "@/components/pagination-controls";
 import { PAGE_SIZE } from "@/constants/pagination";
+import { supabase } from "@/lib/supabase-client";
 
 export default function FeedClient() {
   const [posts, setPosts] = useState<PostWithCommentCount[]>([]);
+  const [likedPostIds, setLikedPostIds] = useState<string[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [totalPages, setTotalPages] = useState<number>(1);
   const searchParams = useSearchParams();
@@ -26,6 +28,23 @@ export default function FeedClient() {
         const data = await res.json();
         setPosts(data.posts);
         setTotalPages(Math.ceil(parseInt(data.total, 10) / PAGE_SIZE));
+
+        const {
+          data: { user },
+        } = await supabase.auth.getUser();
+        if (!user) return;
+
+        const postIds: string[] = data.posts.map(
+          (post: PostWithCommentCount) => post.id
+        );
+        const likeRes = await fetch("/api/likes/status", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ userId: user.id, postIds }),
+        });
+
+        const likedPostIds: string[] = await likeRes.json();
+        setLikedPostIds(likedPostIds);
       } catch (error) {
         console.error("投稿取得エラー", error);
       } finally {
@@ -60,7 +79,11 @@ export default function FeedClient() {
           <div className="flex flex-col gap-4">
             {posts.map((post) => (
               <Link key={post.id} href={`/feed/post/${post.id}`}>
-                <PostCard post={post} totalComments={post._count?.comments} />
+                <PostCard
+                  post={post}
+                  totalComments={post._count?.comments}
+                  isLiked={likedPostIds.includes(post.id)}
+                />
               </Link>
             ))}
           </div>
