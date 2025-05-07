@@ -52,6 +52,9 @@ export default function Header() {
             <Link href={"/feed"} className="text-sm">
               投稿一覧
             </Link>
+            <Link href={"/profile"} className="text-sm">
+              プロフィール
+            </Link>
             <Button
               onClick={handleLogout}
               className={cn(
