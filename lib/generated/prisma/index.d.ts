@@ -241,8 +241,8 @@ export namespace Prisma {
   export import Exact = $Public.Exact
 
   /**
-   * Prisma Client JS version: 6.7.0
-   * Query Engine version: 3cff47a7f5d65c3ea74883f1d736e41d68ce91ed
+   * Prisma Client JS version: 6.6.0
+   * Query Engine version: f676762280b54cd07c770017ed3711ddde35f37a
    */
   export type PrismaVersion = {
     client: string
@@ -1102,46 +1102,46 @@ export namespace Prisma {
 
   export type PostMinAggregateOutputType = {
     id: string | null
-    username: string | null
     content: string | null
     createdAt: Date | null
+    userId: string | null
   }
 
   export type PostMaxAggregateOutputType = {
     id: string | null
-    username: string | null
     content: string | null
     createdAt: Date | null
+    userId: string | null
   }
 
   export type PostCountAggregateOutputType = {
     id: number
-    username: number
     content: number
     createdAt: number
+    userId: number
     _all: number
   }
 
 
   export type PostMinAggregateInputType = {
     id?: true
-    username?: true
     content?: true
     createdAt?: true
+    userId?: true
   }
 
   export type PostMaxAggregateInputType = {
     id?: true
-    username?: true
     content?: true
     createdAt?: true
+    userId?: true
   }
 
   export type PostCountAggregateInputType = {
     id?: true
-    username?: true
     content?: true
     createdAt?: true
+    userId?: true
     _all?: true
   }
 
@@ -1219,9 +1219,9 @@ export namespace Prisma {
 
   export type PostGroupByOutputType = {
     id: string
-    username: string
     content: string
     createdAt: Date
+    userId: string
     _count: PostCountAggregateOutputType | null
     _min: PostMinAggregateOutputType | null
     _max: PostMaxAggregateOutputType | null
@@ -1243,9 +1243,9 @@ export namespace Prisma {
 
   export type PostSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    username?: boolean
     content?: boolean
     createdAt?: boolean
+    userId?: boolean
     comments?: boolean | Post$commentsArgs<ExtArgs>
     likes?: boolean | Post$likesArgs<ExtArgs>
     _count?: boolean | PostCountOutputTypeDefaultArgs<ExtArgs>
@@ -1253,26 +1253,26 @@ export namespace Prisma {
 
   export type PostSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    username?: boolean
     content?: boolean
     createdAt?: boolean
+    userId?: boolean
   }, ExtArgs["result"]["post"]>
 
   export type PostSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    username?: boolean
     content?: boolean
     createdAt?: boolean
+    userId?: boolean
   }, ExtArgs["result"]["post"]>
 
   export type PostSelectScalar = {
     id?: boolean
-    username?: boolean
     content?: boolean
     createdAt?: boolean
+    userId?: boolean
   }
 
-  export type PostOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "username" | "content" | "createdAt", ExtArgs["result"]["post"]>
+  export type PostOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "content" | "createdAt" | "userId", ExtArgs["result"]["post"]>
   export type PostInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     comments?: boolean | Post$commentsArgs<ExtArgs>
     likes?: boolean | Post$likesArgs<ExtArgs>
@@ -1289,9 +1289,9 @@ export namespace Prisma {
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
-      username: string
       content: string
       createdAt: Date
+      userId: string
     }, ExtArgs["result"]["post"]>
     composites: {}
   }
@@ -1718,9 +1718,9 @@ export namespace Prisma {
    */
   interface PostFieldRefs {
     readonly id: FieldRef<"Post", 'String'>
-    readonly username: FieldRef<"Post", 'String'>
     readonly content: FieldRef<"Post", 'String'>
     readonly createdAt: FieldRef<"Post", 'DateTime'>
+    readonly userId: FieldRef<"Post", 'String'>
   }
     
 
@@ -4294,9 +4294,9 @@ export namespace Prisma {
 
   export const PostScalarFieldEnum: {
     id: 'id',
-    username: 'username',
     content: 'content',
-    createdAt: 'createdAt'
+    createdAt: 'createdAt',
+    userId: 'userId'
   };
 
   export type PostScalarFieldEnum = (typeof PostScalarFieldEnum)[keyof typeof PostScalarFieldEnum]
@@ -4394,18 +4394,18 @@ export namespace Prisma {
     OR?: PostWhereInput[]
     NOT?: PostWhereInput | PostWhereInput[]
     id?: StringFilter<"Post"> | string
-    username?: StringFilter<"Post"> | string
     content?: StringFilter<"Post"> | string
     createdAt?: DateTimeFilter<"Post"> | Date | string
+    userId?: StringFilter<"Post"> | string
     comments?: CommentListRelationFilter
     likes?: LikeListRelationFilter
   }
 
   export type PostOrderByWithRelationInput = {
     id?: SortOrder
-    username?: SortOrder
     content?: SortOrder
     createdAt?: SortOrder
+    userId?: SortOrder
     comments?: CommentOrderByRelationAggregateInput
     likes?: LikeOrderByRelationAggregateInput
   }
@@ -4415,18 +4415,18 @@ export namespace Prisma {
     AND?: PostWhereInput | PostWhereInput[]
     OR?: PostWhereInput[]
     NOT?: PostWhereInput | PostWhereInput[]
-    username?: StringFilter<"Post"> | string
     content?: StringFilter<"Post"> | string
     createdAt?: DateTimeFilter<"Post"> | Date | string
+    userId?: StringFilter<"Post"> | string
     comments?: CommentListRelationFilter
     likes?: LikeListRelationFilter
   }, "id">
 
   export type PostOrderByWithAggregationInput = {
     id?: SortOrder
-    username?: SortOrder
     content?: SortOrder
     createdAt?: SortOrder
+    userId?: SortOrder
     _count?: PostCountOrderByAggregateInput
     _max?: PostMaxOrderByAggregateInput
     _min?: PostMinOrderByAggregateInput
@@ -4437,9 +4437,9 @@ export namespace Prisma {
     OR?: PostScalarWhereWithAggregatesInput[]
     NOT?: PostScalarWhereWithAggregatesInput | PostScalarWhereWithAggregatesInput[]
     id?: StringWithAggregatesFilter<"Post"> | string
-    username?: StringWithAggregatesFilter<"Post"> | string
     content?: StringWithAggregatesFilter<"Post"> | string
     createdAt?: DateTimeWithAggregatesFilter<"Post"> | Date | string
+    userId?: StringWithAggregatesFilter<"Post"> | string
   }
 
   export type CommentWhereInput = {
@@ -4550,59 +4550,59 @@ export namespace Prisma {
 
   export type PostCreateInput = {
     id?: string
-    username: string
     content: string
     createdAt?: Date | string
+    userId: string
     comments?: CommentCreateNestedManyWithoutPostInput
     likes?: LikeCreateNestedManyWithoutPostInput
   }
 
   export type PostUncheckedCreateInput = {
     id?: string
-    username: string
     content: string
     createdAt?: Date | string
+    userId: string
     comments?: CommentUncheckedCreateNestedManyWithoutPostInput
     likes?: LikeUncheckedCreateNestedManyWithoutPostInput
   }
 
   export type PostUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
-    username?: StringFieldUpdateOperationsInput | string
     content?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    userId?: StringFieldUpdateOperationsInput | string
     comments?: CommentUpdateManyWithoutPostNestedInput
     likes?: LikeUpdateManyWithoutPostNestedInput
   }
 
   export type PostUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
-    username?: StringFieldUpdateOperationsInput | string
     content?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    userId?: StringFieldUpdateOperationsInput | string
     comments?: CommentUncheckedUpdateManyWithoutPostNestedInput
     likes?: LikeUncheckedUpdateManyWithoutPostNestedInput
   }
 
   export type PostCreateManyInput = {
     id?: string
-    username: string
     content: string
     createdAt?: Date | string
+    userId: string
   }
 
   export type PostUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
-    username?: StringFieldUpdateOperationsInput | string
     content?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    userId?: StringFieldUpdateOperationsInput | string
   }
 
   export type PostUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
-    username?: StringFieldUpdateOperationsInput | string
     content?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    userId?: StringFieldUpdateOperationsInput | string
   }
 
   export type CommentCreateInput = {
@@ -4756,23 +4756,23 @@ export namespace Prisma {
 
   export type PostCountOrderByAggregateInput = {
     id?: SortOrder
-    username?: SortOrder
     content?: SortOrder
     createdAt?: SortOrder
+    userId?: SortOrder
   }
 
   export type PostMaxOrderByAggregateInput = {
     id?: SortOrder
-    username?: SortOrder
     content?: SortOrder
     createdAt?: SortOrder
+    userId?: SortOrder
   }
 
   export type PostMinOrderByAggregateInput = {
     id?: SortOrder
-    username?: SortOrder
     content?: SortOrder
     createdAt?: SortOrder
+    userId?: SortOrder
   }
 
   export type StringWithAggregatesFilter<$PrismaModel = never> = {
@@ -5150,17 +5150,17 @@ export namespace Prisma {
 
   export type PostCreateWithoutCommentsInput = {
     id?: string
-    username: string
     content: string
     createdAt?: Date | string
+    userId: string
     likes?: LikeCreateNestedManyWithoutPostInput
   }
 
   export type PostUncheckedCreateWithoutCommentsInput = {
     id?: string
-    username: string
     content: string
     createdAt?: Date | string
+    userId: string
     likes?: LikeUncheckedCreateNestedManyWithoutPostInput
   }
 
@@ -5182,33 +5182,33 @@ export namespace Prisma {
 
   export type PostUpdateWithoutCommentsInput = {
     id?: StringFieldUpdateOperationsInput | string
-    username?: StringFieldUpdateOperationsInput | string
     content?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    userId?: StringFieldUpdateOperationsInput | string
     likes?: LikeUpdateManyWithoutPostNestedInput
   }
 
   export type PostUncheckedUpdateWithoutCommentsInput = {
     id?: StringFieldUpdateOperationsInput | string
-    username?: StringFieldUpdateOperationsInput | string
     content?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    userId?: StringFieldUpdateOperationsInput | string
     likes?: LikeUncheckedUpdateManyWithoutPostNestedInput
   }
 
   export type PostCreateWithoutLikesInput = {
     id?: string
-    username: string
     content: string
     createdAt?: Date | string
+    userId: string
     comments?: CommentCreateNestedManyWithoutPostInput
   }
 
   export type PostUncheckedCreateWithoutLikesInput = {
     id?: string
-    username: string
     content: string
     createdAt?: Date | string
+    userId: string
     comments?: CommentUncheckedCreateNestedManyWithoutPostInput
   }
 
@@ -5230,17 +5230,17 @@ export namespace Prisma {
 
   export type PostUpdateWithoutLikesInput = {
     id?: StringFieldUpdateOperationsInput | string
-    username?: StringFieldUpdateOperationsInput | string
     content?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    userId?: StringFieldUpdateOperationsInput | string
     comments?: CommentUpdateManyWithoutPostNestedInput
   }
 
   export type PostUncheckedUpdateWithoutLikesInput = {
     id?: StringFieldUpdateOperationsInput | string
-    username?: StringFieldUpdateOperationsInput | string
     content?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    userId?: StringFieldUpdateOperationsInput | string
     comments?: CommentUncheckedUpdateManyWithoutPostNestedInput
   }
 

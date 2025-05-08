@@ -20,14 +20,16 @@ export default function PostForm() {
     e.preventDefault();
 
     const { data: userData } = await supabase.auth.getUser();
-    const username = userData.user?.user_metadata.username;
+    const userId = userData.user?.id;
+
+    console.log(userId);
 
     const res = await fetch("/api/posts", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ username, content }),
+      body: JSON.stringify({ userId, content }),
     });
 
     if (res.ok) {

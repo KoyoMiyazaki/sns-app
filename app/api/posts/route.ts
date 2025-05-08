@@ -25,15 +25,15 @@ export async function GET(req: NextRequest) {
 
 export async function POST(req: Request) {
   const body = await req.json();
-  const { username, content } = body;
+  const { userId, content } = body;
 
-  if (!username || !content) {
+  if (!userId || !content) {
     return NextResponse.json({ message: "不正な入力です" }, { status: 400 });
   }
 
   const post = await prisma.post.create({
     data: {
-      username,
+      userId,
       content,
     },
   });

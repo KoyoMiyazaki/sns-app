@@ -10,11 +10,11 @@ datasource db {
 
 model Post {
   id        String    @id @default(cuid())
-  username  String
   content   String
   createdAt DateTime  @default(now())
   comments  Comment[]
   likes     Like[]
+  userId    String
 }
 
 model Comment {
