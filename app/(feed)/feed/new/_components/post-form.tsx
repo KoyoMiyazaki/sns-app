@@ -22,8 +22,6 @@ export default function PostForm() {
     const { data: userData } = await supabase.auth.getUser();
     const userId = userData.user?.id;
 
-    console.log(userId);
-
     const res = await fetch("/api/posts", {
       method: "POST",
       headers: {
