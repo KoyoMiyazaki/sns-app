@@ -1,6 +1,7 @@
 "use client";
 
 import PostCard from "@/components/post-card";
+import PostSkeleton from "@/components/post-skeleton";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { supabase } from "@/lib/supabase-client";
@@ -15,21 +16,28 @@ interface PostsCardProps {
 
 export default function PostsCard({ user }: PostsCardProps) {
   const [posts, setPosts] = useState<Post[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
     const fetchMyPosts = async () => {
-      const {
-        data: { session },
-      } = await supabase.auth.getSession();
+      try {
+        const {
+          data: { session },
+        } = await supabase.auth.getSession();
 
-      const res = await fetch("/api/posts/mine", {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${session?.access_token}`,
-        },
-      });
-      const data = await res.json();
-      setPosts(data.posts);
+        const res = await fetch("/api/posts/mine", {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${session?.access_token}`,
+          },
+        });
+        const data = await res.json();
+        setPosts(data.posts);
+      } catch (error) {
+        console.error("投稿一覧取得エラー", error);
+      } finally {
+        setLoading(false);
+      }
     };
 
     fetchMyPosts();
@@ -42,13 +50,21 @@ export default function PostsCard({ user }: PostsCardProps) {
       </CardHeader>
       <CardContent className="space-y-2">
         <ScrollArea className="h-[400px] rounded-md border p-4">
-          <div className="flex flex-col gap-4">
-            {posts.map((post) => (
-              <Link key={post.id} href={`/feed/post/${post.id}`}>
-                <PostCard post={post} />
-              </Link>
-            ))}
-          </div>
+          {loading ? (
+            <div className="space-y">
+              {Array.from({ length: 3 }).map((_, i) => (
+                <PostSkeleton key={i} />
+              ))}
+            </div>
+          ) : (
+            <div className="flex flex-col gap-4">
+              {posts.map((post) => (
+                <Link key={post.id} href={`/feed/post/${post.id}`}>
+                  <PostCard post={post} />
+                </Link>
+              ))}
+            </div>
+          )}
         </ScrollArea>
       </CardContent>
     </Card>
