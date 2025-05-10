@@ -35,8 +35,6 @@ export default function PostsCard({ user }: PostsCardProps) {
     fetchMyPosts();
   }, []);
 
-  console.log(posts);
-
   return (
     <Card>
       <CardHeader>
