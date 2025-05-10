@@ -4,15 +4,10 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { supabase } from "@/lib/supabase-client";
 import { LikeWithPost } from "@/types/like";
-import { User as SupabaseUser } from "@supabase/supabase-js";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
-interface LikesCardProps {
-  user: SupabaseUser;
-}
-
-export default function LikesCard({ user }: LikesCardProps) {
+export default function LikesCard() {
   const [likes, setLikes] = useState<LikeWithPost[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
 

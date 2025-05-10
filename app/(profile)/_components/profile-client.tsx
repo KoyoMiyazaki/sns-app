@@ -33,7 +33,7 @@ export default function ProfileClient() {
         {user && <ProfileCard user={user} />}
       </TabsContent>
       <TabsContent value="posts">
-        {user && <PostsCard user={user} />}
+        <PostsCard />
       </TabsContent>
       <TabsContent value="likes">
         <LikesCard />

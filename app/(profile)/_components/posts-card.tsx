@@ -6,15 +6,10 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { supabase } from "@/lib/supabase-client";
 import { Post } from "@/types/post";
-import { User as SupabaseUser } from "@supabase/supabase-js";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
-interface PostsCardProps {
-  user: SupabaseUser;
-}
-
-export default function PostsCard({ user }: PostsCardProps) {
+export default function PostsCard() {
   const [posts, setPosts] = useState<Post[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
 
