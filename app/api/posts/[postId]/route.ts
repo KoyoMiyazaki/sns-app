@@ -11,7 +11,6 @@ export async function GET(
     const post = await prisma.post.findUnique({
       where: { id: postId },
     });
-    console.log(`postId: ${post?.id}`);
 
     if (!post) {
       return NextResponse.json(
