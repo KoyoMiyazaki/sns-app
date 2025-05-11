@@ -1,9 +1,11 @@
 "use client";
 
 import { Button, buttonVariants } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { supabase } from "@/lib/supabase-client";
+import { uploadImage } from "@/lib/supabase-storage";
 import { errorStyle, successStyle } from "@/lib/toast-style";
 import { cn } from "@/lib/utils";
 import { ChevronLeft } from "lucide-react";
@@ -14,6 +16,7 @@ import { toast } from "sonner";
 
 export default function PostForm() {
   const [content, setContent] = useState<string>("");
+  const [image, setImage] = useState<File | null>(null);
   const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -22,12 +25,17 @@ export default function PostForm() {
     const { data: userData } = await supabase.auth.getUser();
     const userId = userData.user?.id;
 
+    let imageUrl = null;
+    if (image) {
+      imageUrl = await uploadImage(image);
+    }
+
     const res = await fetch("/api/posts", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ userId, content }),
+      body: JSON.stringify({ userId, content, imageUrl }),
     });
 
     if (res.ok) {
@@ -69,6 +77,11 @@ export default function PostForm() {
             className="h-60"
           />
         </div>
+        <Input
+          type="file"
+          accept="image/*"
+          onChange={(e) => setImage(e.target.files?.[0] ?? null)}
+        />
         <Button type="submit" className={cn(buttonVariants({ size: "lg" }))}>
           投稿する
         </Button>

@@ -25,7 +25,7 @@ export async function GET(req: NextRequest) {
 
 export async function POST(req: Request) {
   const body = await req.json();
-  const { userId, content } = body;
+  const { userId, content, imageUrl } = body;
 
   if (!userId || !content) {
     return NextResponse.json({ message: "不正な入力です" }, { status: 400 });
@@ -35,6 +35,7 @@ export async function POST(req: Request) {
     data: {
       userId,
       content,
+      imageUrl,
     },
   });
 
