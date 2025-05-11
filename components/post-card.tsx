@@ -23,6 +23,13 @@ export default function PostCard({
       )}
       <p className="font-bold">{post.username}</p>
       <p>{post.content}</p>
+      {post.imageUrl && (
+        <img
+          src={post.imageUrl}
+          alt="投稿画像"
+          className="rounded-md max-h-64 object-cover"
+        />
+      )}
       <div className="flex items-center justify-between">
         <p className="text-sm text-muted-foreground">
           {new Date(post.createdAt).toLocaleString()}
