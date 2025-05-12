@@ -6,13 +6,13 @@ import { Textarea } from "@/components/ui/textarea";
 import { supabase } from "@/lib/supabase-client";
 import { errorStyle, successStyle } from "@/lib/toast-style";
 import { cn } from "@/lib/utils";
-import { Comment } from "@/types/comment";
+import { CommentWithMeta } from "@/types/comment";
 import React, { useEffect, useState } from "react";
 import { toast } from "sonner";
 
 export default function Comments({ postId }: { postId: string }) {
   const [content, setContent] = useState<string>("");
-  const [comments, setComments] = useState<Comment[]>([]);
+  const [comments, setComments] = useState<CommentWithMeta[]>([]);
 
   useEffect(() => {
     const fetchComments = async () => {
@@ -68,8 +68,8 @@ export default function Comments({ postId }: { postId: string }) {
       <h3 className="text-lg font-bold">コメント一覧</h3>
       <div className="space-y-4">
         {comments.map((comment) => (
-          <div className="space-y-2 border p-4 rounded-md">
-            <p className="font-bold">{comment.userId}</p>
+          <div key={comment.id} className="space-y-2 border p-4 rounded-md">
+            <p className="font-bold">{comment.user.username}</p>
             <p>{comment.content}</p>
             <p className="text-sm text-muted-foreground">
               {new Date(comment.createdAt).toLocaleString()}
