@@ -15,6 +15,7 @@ export async function GET(req: NextRequest) {
       _count: {
         select: { comments: true },
       },
+      user: true,
     },
   });
 

@@ -1,9 +1,9 @@
-import { Post } from "@/types/post";
+import { PostWithMeta } from "@/types/post";
 import { Heart, MessageCircleMore } from "lucide-react";
 import { usePathname } from "next/navigation";
 
 interface PostCardProps {
-  post: Post;
+  post: PostWithMeta;
   totalComments?: number;
   isLiked?: boolean;
 }
@@ -21,7 +21,7 @@ export default function PostCard({
       {isLiked && (
         <Heart className="absolute top-4 right-4 text-red-500 fill-red-500 w-4 h-4" />
       )}
-      <p className="font-bold">{post.username}</p>
+      <p className="font-bold">{post.user.username}</p>
       <p>{post.content}</p>
       {post.imageUrl && (
         <img

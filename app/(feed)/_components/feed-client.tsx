@@ -7,14 +7,14 @@ import { cn } from "@/lib/utils";
 import { Plus } from "lucide-react";
 import PostSkeleton from "@/components/post-skeleton";
 import PostCard from "@/components/post-card";
-import { PostWithCommentCount } from "@/types/post";
+import { PostWithMeta } from "@/types/post";
 import { useSearchParams } from "next/navigation";
 import PaginationControls from "@/components/pagination-controls";
 import { PAGE_SIZE } from "@/constants/pagination";
 import { supabase } from "@/lib/supabase-client";
 
 export default function FeedClient() {
-  const [posts, setPosts] = useState<PostWithCommentCount[]>([]);
+  const [posts, setPosts] = useState<PostWithMeta[]>([]);
   const [likedPostIds, setLikedPostIds] = useState<string[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [totalPages, setTotalPages] = useState<number>(1);
@@ -35,7 +35,7 @@ export default function FeedClient() {
         if (!user) return;
 
         const postIds: string[] = data.posts.map(
-          (post: PostWithCommentCount) => post.id
+          (post: PostWithMeta) => post.id
         );
         const likeRes = await fetch("/api/likes/status", {
           method: "POST",

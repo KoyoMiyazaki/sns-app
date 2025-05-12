@@ -1,3 +1,5 @@
+import { User } from "./user";
+
 export interface Post {
   id: string;
   userId: string;
@@ -6,8 +8,9 @@ export interface Post {
   createdAt: string;
 }
 
-export interface PostWithCommentCount extends Post {
+export interface PostWithMeta extends Post {
   _count: {
     comments: number;
   };
+  user: User;
 }
