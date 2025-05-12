@@ -12,29 +12,41 @@ model Post {
   id        String    @id @default(cuid())
   content   String
   imageUrl  String?
-  createdAt DateTime  @default(now())
+  userId    String
   comments  Comment[]
   likes     Like[]
-  userId    String
+  createdAt DateTime  @default(now())
+
+  user User @relation(fields: [userId], references: [id])
 }
 
 model Comment {
   id        String   @id @default(cuid())
-  postId    String
-  username  String
   content   String
+  userId    String
+  postId    String
   createdAt DateTime @default(now())
 
+  user User @relation(fields: [userId], references: [id])
   post Post @relation(fields: [postId], references: [id])
 }
 
 model Like {
   id        String   @id @default(cuid())
-  postId    String
   userId    String
+  postId    String
   createdAt DateTime @default(now())
 
   post Post @relation(fields: [postId], references: [id])
+  user User @relation(fields: [userId], references: [id])
 
   @@unique([postId, userId])
+}
+
+model User {
+  id       String    @id
+  username String?
+  Post     Post[]
+  Comment  Comment[]
+  Like     Like[]
 }
