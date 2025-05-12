@@ -26,16 +26,16 @@ export async function GET(req: NextRequest) {
 }
 
 export async function POST(req: Request) {
-  const { postId, username, content } = await req.json();
+  const { postId, userId, content } = await req.json();
 
-  if (!postId || !username || !content) {
+  if (!postId || !userId || !content) {
     return NextResponse.json({ message: "不正な入力です" }, { status: 400 });
   }
 
   const comment = await prisma.comment.create({
     data: {
       postId,
-      username,
+      userId,
       content,
     },
   });

@@ -1,7 +1,6 @@
 "use client";
 
 import { Button, buttonVariants } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { supabase } from "@/lib/supabase-client";
@@ -28,14 +27,14 @@ export default function Comments({ postId }: { postId: string }) {
     e.preventDefault();
 
     const { data: userData } = await supabase.auth.getUser();
-    const username = userData.user?.user_metadata.username;
+    const userId = userData.user?.id;
 
     const res = await fetch("/api/comments", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ postId, username, content }),
+      body: JSON.stringify({ postId, content, userId }),
     });
 
     if (res.ok) {
@@ -70,7 +69,7 @@ export default function Comments({ postId }: { postId: string }) {
       <div className="space-y-4">
         {comments.map((comment) => (
           <div className="space-y-2 border p-4 rounded-md">
-            <p className="font-bold">{comment.username}</p>
+            <p className="font-bold">{comment.userId}</p>
             <p>{comment.content}</p>
             <p className="text-sm text-muted-foreground">
               {new Date(comment.createdAt).toLocaleString()}
