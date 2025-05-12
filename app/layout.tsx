@@ -3,6 +3,7 @@ import { Noto_Sans_JP } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "@/components/ui/sonner";
 import Header from "@/components/header";
+import AuthUserInserter from "@/components/auth-user-inserter";
 
 const fontNotoSansJP = Noto_Sans_JP({ subsets: ["latin"] });
 
@@ -23,6 +24,7 @@ export default function RootLayout({
     <html lang="ja">
       <body className={`${fontNotoSansJP.className} antialiased min-h-screen`}>
         <Header />
+        <AuthUserInserter />
         <main className="flex flex-col items-center gap-4 justify-center min-h-screen pt-12">
           {children}
         </main>
