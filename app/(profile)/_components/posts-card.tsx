@@ -5,12 +5,12 @@ import PostSkeleton from "@/components/post-skeleton";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { supabase } from "@/lib/supabase-client";
-import { Post } from "@/types/post";
+import { PostWithMeta } from "@/types/post";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
 export default function PostsCard() {
-  const [posts, setPosts] = useState<Post[]>([]);
+  const [posts, setPosts] = useState<PostWithMeta[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
