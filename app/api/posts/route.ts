@@ -4,22 +4,34 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
+  const q = searchParams.get("q");
   const page = parseInt(searchParams.get("page") || "1", 10);
   const skip = (page - 1) * PAGE_SIZE;
 
-  const posts = await prisma.post.findMany({
-    orderBy: { createdAt: "desc" },
-    skip,
-    take: PAGE_SIZE,
-    include: {
-      _count: {
-        select: { comments: true },
-      },
-      user: true,
-    },
-  });
+  const whereClause = q
+    ? {
+        content: {
+          contains: q,
+          mode: "insensitive" as const,
+        },
+      }
+    : {};
 
-  const total = await prisma.post.count();
+  const [posts, total] = await Promise.all([
+    prisma.post.findMany({
+      where: whereClause,
+      orderBy: { createdAt: "desc" },
+      skip,
+      take: PAGE_SIZE,
+      include: {
+        user: true,
+        _count: {
+          select: { comments: true },
+        },
+      },
+    }),
+    prisma.post.count({ where: whereClause }),
+  ]);
 
   return Response.json({ posts, total });
 }

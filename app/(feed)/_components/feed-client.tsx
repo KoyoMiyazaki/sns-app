@@ -12,6 +12,7 @@ import { useSearchParams } from "next/navigation";
 import PaginationControls from "@/components/pagination-controls";
 import { PAGE_SIZE } from "@/constants/pagination";
 import { supabase } from "@/lib/supabase-client";
+import { Input } from "@/components/ui/input";
 
 export default function FeedClient() {
   const [posts, setPosts] = useState<PostWithMeta[]>([]);
@@ -20,11 +21,12 @@ export default function FeedClient() {
   const [totalPages, setTotalPages] = useState<number>(1);
   const searchParams = useSearchParams();
   const page = parseInt(searchParams.get("page") || "1", 10);
+  const q = searchParams.get("q") || "";
 
   useEffect(() => {
     const fetchPosts = async () => {
       try {
-        const res = await fetch(`/api/posts?page=${page}`);
+        const res = await fetch(`/api/posts?page=${page}&q=${q}`);
         const data = await res.json();
         setPosts(data.posts);
         setTotalPages(Math.ceil(parseInt(data.total, 10) / PAGE_SIZE));
@@ -53,7 +55,7 @@ export default function FeedClient() {
     };
 
     fetchPosts();
-  }, []);
+  }, [page, q]);
 
   return (
     <div className="flex flex-col gap-8 w-[350px] md:w-[400px]">
@@ -68,6 +70,9 @@ export default function FeedClient() {
           </Button>
         </Link>
       </div>
+      <form method="GET">
+        <Input type="text" name="q" defaultValue={q} placeholder="投稿を検索" />
+      </form>
       {loading ? (
         <div className="space-y-4">
           {Array.from({ length: 3 }).map((_, i) => (
