@@ -1,6 +1,6 @@
 import { Like } from "@/lib/generated/prisma";
-import { Post } from "./post";
+import { PostWithMeta } from "./post";
 
-export interface LikeWithPost extends Like {
-  post: Post;
+export interface LikeWithMeta extends Like {
+  post: PostWithMeta;
 }

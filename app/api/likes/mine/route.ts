@@ -31,7 +31,14 @@ export async function GET(req: Request) {
   const likes = await prisma.like.findMany({
     where: { userId: userData.user.id },
     include: {
-      post: true,
+      post: {
+        include: {
+          user: true,
+          _count: {
+            select: { comments: true },
+          },
+        },
+      },
     },
     orderBy: { createdAt: "desc" },
   });

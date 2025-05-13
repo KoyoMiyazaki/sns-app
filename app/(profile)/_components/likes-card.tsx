@@ -3,12 +3,12 @@ import PostSkeleton from "@/components/post-skeleton";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { supabase } from "@/lib/supabase-client";
-import { LikeWithPost } from "@/types/like";
+import { LikeWithMeta } from "@/types/like";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
 export default function LikesCard() {
-  const [likes, setLikes] = useState<LikeWithPost[]>([]);
+  const [likes, setLikes] = useState<LikeWithMeta[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
