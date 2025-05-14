@@ -1,5 +1,6 @@
 "use client";
 
+import EmptyComponent from "@/components/empty-component";
 import PostCard from "@/components/post-card";
 import PostSkeleton from "@/components/post-skeleton";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -51,6 +52,8 @@ export default function PostsCard() {
                 <PostSkeleton key={i} />
               ))}
             </div>
+          ) : posts.length === 0 ? (
+            <EmptyComponent objectName={"投稿"} />
           ) : (
             <div className="flex flex-col gap-4">
               {posts.map((post) => (

@@ -1,5 +1,6 @@
 "use client";
 
+import EmptyComponent from "@/components/empty-component";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
@@ -66,17 +67,21 @@ export default function Comments({ postId }: { postId: string }) {
         </Button>
       </form>
       <h3 className="text-lg font-bold">コメント一覧</h3>
-      <div className="space-y-4">
-        {comments.map((comment) => (
-          <div key={comment.id} className="space-y-2 border p-4 rounded-md">
-            <p className="font-bold">{comment.user.username}</p>
-            <p>{comment.content}</p>
-            <p className="text-sm text-muted-foreground">
-              {new Date(comment.createdAt).toLocaleString()}
-            </p>
-          </div>
-        ))}
-      </div>
+      {comments.length === 0 ? (
+        <EmptyComponent objectName={"コメント"} />
+      ) : (
+        <div className="space-y-4">
+          {comments.map((comment) => (
+            <div key={comment.id} className="space-y-2 border p-4 rounded-md">
+              <p className="font-bold">{comment.user.username}</p>
+              <p>{comment.content}</p>
+              <p className="text-sm text-muted-foreground">
+                {new Date(comment.createdAt).toLocaleString()}
+              </p>
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 }

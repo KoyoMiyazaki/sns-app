@@ -13,6 +13,7 @@ import PaginationControls from "@/components/pagination-controls";
 import { PAGE_SIZE } from "@/constants/pagination";
 import { supabase } from "@/lib/supabase-client";
 import { Input } from "@/components/ui/input";
+import EmptyComponent from "@/components/empty-component";
 
 export default function FeedClient() {
   const [posts, setPosts] = useState<PostWithMeta[]>([]);
@@ -79,6 +80,8 @@ export default function FeedClient() {
             <PostSkeleton key={i} />
           ))}
         </div>
+      ) : posts.length === 0 ? (
+        <EmptyComponent objectName={"投稿"} />
       ) : (
         <>
           <div className="flex flex-col gap-4">

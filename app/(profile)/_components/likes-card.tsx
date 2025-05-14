@@ -1,3 +1,4 @@
+import EmptyComponent from "@/components/empty-component";
 import PostCard from "@/components/post-card";
 import PostSkeleton from "@/components/post-skeleton";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -49,6 +50,8 @@ export default function LikesCard() {
                 <PostSkeleton key={i} />
               ))}
             </div>
+          ) : likes.length === 0 ? (
+            <EmptyComponent objectName={"いいね"} />
           ) : (
             <div className="flex flex-col gap-4">
               {likes.map((like) => (
