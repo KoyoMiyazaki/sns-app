@@ -1,37 +1,13 @@
-"use client";
-
-import { supabase } from "@/lib/supabase-client";
 import Link from "next/link";
-import { useEffect, useState } from "react";
-import { Button, buttonVariants } from "./ui/button";
+import { Button, buttonVariants } from "../ui/button";
 import { cn } from "@/lib/utils";
 
-export default function Header() {
-  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
+interface HeaderPCProps {
+  isLoggedIn: boolean;
+  handleLogout: () => void;
+}
 
-  useEffect(() => {
-    const getInitialSession = async () => {
-      const { data } = await supabase.auth.getSession();
-      setIsLoggedIn(!!data.session);
-    };
-    getInitialSession();
-
-    const {
-      data: { subscription },
-    } = supabase.auth.onAuthStateChange((event, session) => {
-      setIsLoggedIn(!!session);
-    });
-
-    return () => {
-      subscription.unsubscribe();
-    };
-  }, []);
-
-  const handleLogout = async () => {
-    await supabase.auth.signOut();
-    location.href = "/login";
-  };
-
+export default function HeaderPC({ isLoggedIn, handleLogout }: HeaderPCProps) {
   return (
     <header className="fixed top-0 left-0 w-full z-50 border-b shadow-xs flex justify-between items-center py-4 px-8 bg-white">
       <Link href={"/"} className="text-xl font-bold">
