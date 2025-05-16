@@ -1,8 +1,9 @@
 "use client";
 
 import { Menu, X } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 interface HeaderMobileProps {
   isLoggedIn: boolean;
@@ -14,6 +15,11 @@ export default function HeaderMobile({
   handleLogout,
 }: HeaderMobileProps) {
   const [menuOpen, setMenuOpen] = useState<boolean>(false);
+  const pathname = usePathname();
+
+  useEffect(() => {
+    setMenuOpen(false);
+  }, [pathname]);
 
   return (
     <header className="relative top-0 left-0 w-full z-50 border-b shadow-xs p-4 bg-white">
