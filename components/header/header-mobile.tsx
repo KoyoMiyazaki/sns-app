@@ -26,7 +26,10 @@ export default function HeaderMobile({
   }, [menuOpen]);
 
   return (
-    <header className="relative top-0 left-0 w-full z-50 border-b shadow-xs p-4 bg-white">
+    <header
+      aria-expanded={menuOpen}
+      className="relative top-0 left-0 w-full z-50 border-b shadow-xs p-4 bg-white"
+    >
       <button onClick={() => setMenuOpen(!menuOpen)} className="cursor-pointer">
         {menuOpen ? <X /> : <Menu />}
       </button>
