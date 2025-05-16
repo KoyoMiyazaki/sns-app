@@ -43,7 +43,7 @@ export default function Header() {
   };
 
   return isMobile ? (
-    <HeaderMobile />
+    <HeaderMobile isLoggedIn={isLoggedIn} handleLogout={handleLogout} />
   ) : (
     <HeaderPC isLoggedIn={isLoggedIn} handleLogout={handleLogout} />
   );
