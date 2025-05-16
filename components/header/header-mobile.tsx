@@ -21,6 +21,10 @@ export default function HeaderMobile({
     setMenuOpen(false);
   }, [pathname]);
 
+  useEffect(() => {
+    document.body.style.overflow = menuOpen ? "hidden" : "";
+  }, [menuOpen]);
+
   return (
     <header className="relative top-0 left-0 w-full z-50 border-b shadow-xs p-4 bg-white">
       <button onClick={() => setMenuOpen(!menuOpen)} className="cursor-pointer">
