@@ -1,3 +1,4 @@
+import { PostTagWithTag } from "./post-tag";
 import { User } from "./user";
 
 export interface Post {
@@ -13,4 +14,8 @@ export interface PostWithMeta extends Post {
     comments: number;
   };
   user: User;
+}
+
+export interface PostWithMetaAndTags extends PostWithMeta {
+  tags: PostTagWithTag[];
 }
