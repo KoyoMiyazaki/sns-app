@@ -1,4 +1,4 @@
-import { PostWithMeta } from "./post";
+import { PostWithMetaAndTags } from "./post";
 
 export interface Like {
   id: string;
@@ -8,5 +8,5 @@ export interface Like {
 }
 
 export interface LikeWithMeta extends Like {
-  post: PostWithMeta;
+  post: PostWithMetaAndTags;
 }

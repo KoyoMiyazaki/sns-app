@@ -34,6 +34,11 @@ export async function GET(req: Request) {
       post: {
         include: {
           user: true,
+          tags: {
+            include: {
+              tag: true,
+            },
+          },
           _count: {
             select: { comments: true },
           },

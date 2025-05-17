@@ -32,7 +32,14 @@ export async function GET(req: Request) {
     where: {
       userId: userData.user.id,
     },
-    include: { user: true },
+    include: {
+      user: true,
+      tags: {
+        include: {
+          tag: true,
+        },
+      },
+    },
     orderBy: { createdAt: "desc" },
   });
 
