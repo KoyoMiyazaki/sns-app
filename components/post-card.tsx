@@ -1,9 +1,10 @@
-import { PostWithMeta } from "@/types/post";
+import { PostWithMetaAndTags } from "@/types/post";
 import { Heart, MessageCircleMore } from "lucide-react";
 import { usePathname } from "next/navigation";
+import TagsControl from "./tags-control";
 
 interface PostCardProps {
-  post: PostWithMeta;
+  post: PostWithMetaAndTags;
   totalComments?: number;
   isLiked?: boolean;
 }
@@ -30,6 +31,7 @@ export default function PostCard({
           className="rounded-md max-h-64 object-cover"
         />
       )}
+      {post.tags.length > 0 && <TagsControl tags={post.tags} />}
       <div className="flex items-center justify-between">
         <p className="text-sm text-muted-foreground">
           {new Date(post.createdAt).toLocaleString()}

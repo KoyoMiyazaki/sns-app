@@ -7,7 +7,7 @@ import { cn } from "@/lib/utils";
 import { Plus } from "lucide-react";
 import PostSkeleton from "@/components/post-skeleton";
 import PostCard from "@/components/post-card";
-import { PostWithMeta } from "@/types/post";
+import { PostWithMetaAndTags } from "@/types/post";
 import { useSearchParams } from "next/navigation";
 import PaginationControls from "@/components/pagination-controls";
 import { PAGE_SIZE } from "@/constants/pagination";
@@ -16,7 +16,7 @@ import { Input } from "@/components/ui/input";
 import EmptyComponent from "@/components/empty-component";
 
 export default function FeedClient() {
-  const [posts, setPosts] = useState<PostWithMeta[]>([]);
+  const [posts, setPosts] = useState<PostWithMetaAndTags[]>([]);
   const [likedPostIds, setLikedPostIds] = useState<string[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [totalPages, setTotalPages] = useState<number>(1);
@@ -38,7 +38,7 @@ export default function FeedClient() {
         if (!user) return;
 
         const postIds: string[] = data.posts.map(
-          (post: PostWithMeta) => post.id
+          (post: PostWithMetaAndTags) => post.id
         );
         const likeRes = await fetch("/api/likes/status", {
           method: "POST",

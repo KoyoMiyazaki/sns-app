@@ -25,6 +25,11 @@ export async function GET(req: NextRequest) {
       take: PAGE_SIZE,
       include: {
         user: true,
+        tags: {
+          include: {
+            tag: true,
+          },
+        },
         _count: {
           select: { comments: true },
         },
