@@ -10,7 +10,14 @@ export async function GET(
   try {
     const post = await prisma.post.findUnique({
       where: { id: postId },
-      include: { user: true },
+      include: {
+        user: true,
+        tags: {
+          include: {
+            tag: true,
+          },
+        },
+      },
     });
 
     if (!post) {

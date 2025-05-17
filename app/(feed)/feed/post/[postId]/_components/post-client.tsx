@@ -4,7 +4,7 @@ import PostCard from "@/components/post-card";
 import PostSkeleton from "@/components/post-skeleton";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { PostWithMeta } from "@/types/post";
+import { PostWithMetaAndTags } from "@/types/post";
 import { ChevronLeft, Heart } from "lucide-react";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
@@ -18,7 +18,7 @@ interface PostClientProps {
 }
 
 export default function PostClient({ postId }: PostClientProps) {
-  const [post, setPost] = useState<PostWithMeta | null>(null);
+  const [post, setPost] = useState<PostWithMetaAndTags | null>(null);
   const [isLiked, setIsLiked] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
