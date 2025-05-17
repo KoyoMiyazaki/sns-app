@@ -16,6 +16,7 @@ import { toast } from "sonner";
 
 export default function PostForm() {
   const [content, setContent] = useState<string>("");
+  const [tags, setTags] = useState<string>("");
   const [image, setImage] = useState<File | null>(null);
   const router = useRouter();
 
@@ -24,6 +25,7 @@ export default function PostForm() {
 
     const { data: userData } = await supabase.auth.getUser();
     const userId = userData.user?.id;
+    const splitedTags = tags.split(",");
 
     let imageUrl = null;
     if (image) {
@@ -35,7 +37,7 @@ export default function PostForm() {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ userId, content, imageUrl }),
+      body: JSON.stringify({ userId, content, tags: splitedTags, imageUrl }),
     });
 
     if (res.ok) {
@@ -75,6 +77,15 @@ export default function PostForm() {
             value={content}
             onChange={(e) => setContent(e.target.value)}
             className="h-60"
+          />
+        </div>
+        <div className="space-y-2">
+          <Label htmlFor="tags">タグ（カンマ区切り）</Label>
+          <Input
+            id="tags"
+            type="text"
+            value={tags}
+            onChange={(e) => setTags(e.target.value)}
           />
         </div>
         <Input

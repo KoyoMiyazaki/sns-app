@@ -39,18 +39,42 @@ export async function GET(req: NextRequest) {
 export async function POST(req: Request) {
   const body = await req.json();
   const { userId, content, imageUrl } = body;
+  const tags: string[] = (body.tags || []).filter(
+    (tag: string) => tag.trim() !== ""
+  );
 
   if (!userId || !content) {
     return NextResponse.json({ message: "不正な入力です" }, { status: 400 });
   }
 
-  const post = await prisma.post.create({
-    data: {
-      userId,
-      content,
-      imageUrl,
-    },
-  });
+  let post;
+  if (tags.length > 0) {
+    post = await prisma.post.create({
+      data: {
+        userId,
+        content,
+        imageUrl,
+        tags: {
+          create: tags.map((tag) => ({
+            tag: {
+              connectOrCreate: {
+                where: { name: tag },
+                create: { name: tag },
+              },
+            },
+          })),
+        },
+      },
+    });
+  } else {
+    post = await prisma.post.create({
+      data: {
+        userId,
+        content,
+        imageUrl,
+      },
+    });
+  }
 
   return NextResponse.json(post, { status: 201 });
 }
