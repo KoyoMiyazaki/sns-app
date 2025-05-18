@@ -30,6 +30,15 @@ export default function NotificationsClient() {
         });
         const data = await res.json();
         setNotifications(data);
+
+        // 一括既読処理
+        await fetch("/api/notifications/read-all", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${session?.access_token}`,
+          },
+        });
       } catch (error) {
         console.error("通知一覧取得エラー", error);
       } finally {
