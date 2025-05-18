@@ -9,12 +9,35 @@ export async function POST(req: Request) {
     return NextResponse.json({ message: "不正な入力です" }, { status: 400 });
   }
 
+  const post = await prisma.post.findUnique({
+    where: { id: postId },
+    select: { userId: true },
+  });
+
+  if (!post) {
+    return NextResponse.json(
+      { message: "投稿が存在しません" },
+      { status: 404 }
+    );
+  }
+
   const like = await prisma.like.create({
     data: {
       postId,
       userId,
     },
   });
+
+  if (post.userId !== userId) {
+    await prisma.notification.create({
+      data: {
+        type: "like",
+        userId: post.userId,
+        postId,
+        actorId: userId,
+      },
+    });
+  }
 
   return NextResponse.json(like, { status: 201 });
 }
