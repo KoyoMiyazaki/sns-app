@@ -1,17 +1,20 @@
 "use client";
 
-import { Bell, Menu, X } from "lucide-react";
+import { Menu, X } from "lucide-react";
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import NotificationLink from "./notification-link";
 
 interface HeaderMobileProps {
   isLoggedIn: boolean;
+  notificationCount: number;
   handleLogout: () => void;
 }
 
 export default function HeaderMobile({
   isLoggedIn,
+  notificationCount,
   handleLogout,
 }: HeaderMobileProps) {
   const [menuOpen, setMenuOpen] = useState<boolean>(false);
@@ -33,9 +36,7 @@ export default function HeaderMobile({
       <button onClick={() => setMenuOpen(!menuOpen)} className="cursor-pointer">
         {menuOpen ? <X /> : <Menu />}
       </button>
-      <Link href={"/notifications"}>
-        <Bell className="w-5 h-5" />
-      </Link>
+      <NotificationLink notificationCount={notificationCount} />
       {menuOpen && (
         <nav className="absolute top-20 left-0 w-full flex flex-col gap-4 p-4 border-2 rounded-md shadow-xs z-100 bg-white">
           <Link href={"/"} className="text-md font-medium">

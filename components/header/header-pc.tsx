@@ -1,14 +1,19 @@
 import Link from "next/link";
 import { Button, buttonVariants } from "../ui/button";
 import { cn } from "@/lib/utils";
-import { Bell } from "lucide-react";
+import NotificationLink from "./notification-link";
 
 interface HeaderPCProps {
   isLoggedIn: boolean;
+  notificationCount: number;
   handleLogout: () => void;
 }
 
-export default function HeaderPC({ isLoggedIn, handleLogout }: HeaderPCProps) {
+export default function HeaderPC({
+  isLoggedIn,
+  notificationCount,
+  handleLogout,
+}: HeaderPCProps) {
   return (
     <header className="fixed top-0 left-0 w-full z-50 border-b shadow-xs flex justify-between items-center py-4 px-8 bg-white">
       <Link href={"/"} className="text-xl font-bold">
@@ -26,9 +31,7 @@ export default function HeaderPC({ isLoggedIn, handleLogout }: HeaderPCProps) {
           </>
         ) : (
           <>
-            <Link href={"/notifications"}>
-              <Bell className="w-5 h-5" />
-            </Link>
+            <NotificationLink notificationCount={notificationCount} />
             <Link href={"/feed"} className="text-sm">
               投稿一覧
             </Link>

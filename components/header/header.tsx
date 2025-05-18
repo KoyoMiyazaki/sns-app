@@ -1,16 +1,14 @@
 "use client";
 
 import { supabase } from "@/lib/supabase-client";
-import Link from "next/link";
 import { useEffect, useState } from "react";
-import { Button, buttonVariants } from "../ui/button";
-import { cn } from "@/lib/utils";
 import HeaderMobile from "./header-mobile";
 import HeaderPC from "./header-pc";
 
 export default function Header() {
   const [isMobile, setIsMobile] = useState<boolean>(false);
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
+  const [notificationCount, setNotificationCount] = useState<number>(0);
 
   useEffect(() => {
     const update = () => setIsMobile(window.innerWidth < 768);
@@ -22,7 +20,19 @@ export default function Header() {
   useEffect(() => {
     const getInitialSession = async () => {
       const { data } = await supabase.auth.getSession();
-      setIsLoggedIn(!!data.session);
+      const session = data.session;
+      setIsLoggedIn(!!session);
+
+      if (session) {
+        const token = session.access_token;
+        const res = await fetch("/api/notifications/unread-count", {
+          headers: {
+            Authorization: `Bearer ${session?.access_token}`,
+          },
+        });
+        const json = await res.json();
+        setNotificationCount(json.count);
+      }
     };
     getInitialSession();
 
@@ -30,6 +40,17 @@ export default function Header() {
       data: { subscription },
     } = supabase.auth.onAuthStateChange((event, session) => {
       setIsLoggedIn(!!session);
+      if (session) {
+        fetch("/api/notifications/unread-count", {
+          headers: {
+            Authorization: `Bearer ${session.access_token}`,
+          },
+        })
+          .then((res) => res.json())
+          .then((json) => setNotificationCount(json.count));
+      } else {
+        setNotificationCount(0);
+      }
     });
 
     return () => {
@@ -43,8 +64,16 @@ export default function Header() {
   };
 
   return isMobile ? (
-    <HeaderMobile isLoggedIn={isLoggedIn} handleLogout={handleLogout} />
+    <HeaderMobile
+      isLoggedIn={isLoggedIn}
+      notificationCount={notificationCount}
+      handleLogout={handleLogout}
+    />
   ) : (
-    <HeaderPC isLoggedIn={isLoggedIn} handleLogout={handleLogout} />
+    <HeaderPC
+      isLoggedIn={isLoggedIn}
+      notificationCount={notificationCount}
+      handleLogout={handleLogout}
+    />
   );
 }
