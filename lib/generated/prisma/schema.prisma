@@ -18,7 +18,8 @@ model Post {
   likes     Like[]
   createdAt DateTime  @default(now())
 
-  user User @relation(fields: [userId], references: [id])
+  user         User           @relation(fields: [userId], references: [id])
+  Notification Notification[]
 }
 
 model Tag {
@@ -60,10 +61,26 @@ model Like {
   @@unique([postId, userId])
 }
 
+model Notification {
+  id        String   @id @default(cuid())
+  type      String
+  read      Boolean  @default(false)
+  userId    String
+  postId    String?
+  actorId   String
+  createdAt DateTime @default(now())
+
+  user  User  @relation("Receiver", fields: [userId], references: [id])
+  actor User  @relation("Actor", fields: [actorId], references: [id])
+  post  Post? @relation(fields: [postId], references: [id])
+}
+
 model User {
-  id       String    @id
-  username String?
-  Post     Post[]
-  Comment  Comment[]
-  Like     Like[]
+  id               String         @id
+  username         String?
+  Post             Post[]
+  Comment          Comment[]
+  Like             Like[]
+  Notification     Notification[] @relation("Receiver")
+  SentNotification Notification[] @relation("Actor")
 }
