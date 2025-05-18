@@ -1,5 +1,7 @@
 "use client";
 
+import EmptyComponent from "@/components/empty-component";
+import NotificationSkeleton from "@/components/notification-skeleton";
 import { getNotificationLabel } from "@/lib/notification-helpers";
 import { supabase } from "@/lib/supabase-client";
 import { NotificationWithMeta } from "@/types/notification";
@@ -11,6 +13,7 @@ export default function NotificationsClient() {
   const [notifications, setNotifications] = useState<NotificationWithMeta[]>(
     []
   );
+  const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
     const fetchNotifications = async () => {
@@ -29,6 +32,8 @@ export default function NotificationsClient() {
         setNotifications(data);
       } catch (error) {
         console.error("通知一覧取得エラー", error);
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -38,16 +43,15 @@ export default function NotificationsClient() {
   return (
     <div className="flex flex-col gap-8 w-[350px] md:w-[400px]">
       <h1 className="text-2xl font-bold">通知一覧</h1>
-      {/* {loading ? (
-        <div className="space-y-4">
+      {loading ? (
+        <div className="divide-y border-y">
           {Array.from({ length: 3 }).map((_, i) => (
-            <PostSkeleton key={i} />
+            <NotificationSkeleton key={i} />
           ))}
         </div>
-      ) : posts.length === 0 ? (
-        <EmptyComponent objectName={"投稿"} />
-      ) : ( */}
-      <>
+      ) : notifications.length === 0 ? (
+        <EmptyComponent objectName={"通知"} />
+      ) : (
         <div className="flex flex-col divide-y border-y">
           {notifications.map((notification) => (
             <Link
@@ -72,8 +76,7 @@ export default function NotificationsClient() {
             </Link>
           ))}
         </div>
-      </>
-      {/* )} */}
+      )}
     </div>
   );
 }
