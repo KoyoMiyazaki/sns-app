@@ -26,6 +26,8 @@ export default function FeedClient() {
   const searchParams = useSearchParams();
   const page = parseInt(searchParams.get("page") || "1", 10);
   const q = searchParams.get("q") || "";
+  const selectedTags = searchParams.getAll("tags");
+  const tagsKey = selectedTags.join(",");
 
   useEffect(() => {
     const fetchTags = async () => {
@@ -40,7 +42,15 @@ export default function FeedClient() {
   useEffect(() => {
     const fetchPosts = async () => {
       try {
-        const res = await fetch(`/api/posts?page=${page}&q=${q}`);
+        let res;
+        if (selectedTags.length > 0) {
+          const tagsQuery = selectedTags
+            .map((tag) => `tags=${encodeURIComponent(tag)}`)
+            .join("&");
+          res = await fetch(`/api/posts?page=${page}&${tagsQuery}`);
+        } else {
+          res = await fetch(`/api/posts?page=${page}&q=${q}`);
+        }
         const data = await res.json();
         setPosts(data.posts);
         setTotalPages(Math.ceil(parseInt(data.total, 10) / PAGE_SIZE));
@@ -69,7 +79,7 @@ export default function FeedClient() {
     };
 
     fetchPosts();
-  }, [page, q]);
+  }, [page, q, tagsKey]);
 
   return (
     <div className="flex flex-col gap-8 w-[350px] md:w-[400px]">

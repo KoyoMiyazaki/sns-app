@@ -5,6 +5,7 @@ import { NextRequest, NextResponse } from "next/server";
 export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
   const q = searchParams.get("q");
+  const selectedTags = searchParams.getAll("tags");
   const page = parseInt(searchParams.get("page") || "1", 10);
   const skip = (page - 1) * PAGE_SIZE;
 
@@ -13,6 +14,16 @@ export async function GET(req: NextRequest) {
         content: {
           contains: q,
           mode: "insensitive" as const,
+        },
+      }
+    : selectedTags.length > 0
+    ? {
+        tags: {
+          some: {
+            tag: {
+              name: { in: selectedTags },
+            },
+          },
         },
       }
     : {};
