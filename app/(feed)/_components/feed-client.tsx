@@ -14,15 +14,28 @@ import { PAGE_SIZE } from "@/constants/pagination";
 import { supabase } from "@/lib/supabase-client";
 import { Input } from "@/components/ui/input";
 import EmptyComponent from "@/components/empty-component";
+import TagSearchField from "./tag-search-field";
+import { Tag } from "@/types/tag";
 
 export default function FeedClient() {
   const [posts, setPosts] = useState<PostWithMetaAndTags[]>([]);
   const [likedPostIds, setLikedPostIds] = useState<string[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [totalPages, setTotalPages] = useState<number>(1);
+  const [tags, setTags] = useState<Tag[]>([]);
   const searchParams = useSearchParams();
   const page = parseInt(searchParams.get("page") || "1", 10);
   const q = searchParams.get("q") || "";
+
+  useEffect(() => {
+    const fetchTags = async () => {
+      const res = await fetch("/api/tags");
+      const data = await res.json();
+      setTags(data);
+    };
+
+    fetchTags();
+  }, []);
 
   useEffect(() => {
     const fetchPosts = async () => {
@@ -71,9 +84,17 @@ export default function FeedClient() {
           </Button>
         </Link>
       </div>
-      <form method="GET">
-        <Input type="text" name="q" defaultValue={q} placeholder="投稿を検索" />
-      </form>
+      <div className="space-y-4">
+        <form method="GET">
+          <Input
+            type="text"
+            name="q"
+            defaultValue={q}
+            placeholder="投稿を検索"
+          />
+        </form>
+        <TagSearchField tags={tags} />
+      </div>
       {loading ? (
         <div className="space-y-4">
           {Array.from({ length: 3 }).map((_, i) => (
