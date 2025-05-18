@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Button, buttonVariants } from "../ui/button";
 import { cn } from "@/lib/utils";
+import { Bell } from "lucide-react";
 
 interface HeaderPCProps {
   isLoggedIn: boolean;
@@ -13,7 +14,7 @@ export default function HeaderPC({ isLoggedIn, handleLogout }: HeaderPCProps) {
       <Link href={"/"} className="text-xl font-bold">
         MySNS
       </Link>
-      <nav className="space-x-4">
+      <nav className="flex items-center gap-4">
         {!isLoggedIn ? (
           <>
             <Link href={"/signup"} className="text-sm">
@@ -25,6 +26,9 @@ export default function HeaderPC({ isLoggedIn, handleLogout }: HeaderPCProps) {
           </>
         ) : (
           <>
+            <Link href={"/notifications"}>
+              <Bell className="w-5 h-5" />
+            </Link>
             <Link href={"/feed"} className="text-sm">
               投稿一覧
             </Link>

@@ -1,6 +1,6 @@
 "use client";
 
-import { Menu, X } from "lucide-react";
+import { Bell, Menu, X } from "lucide-react";
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -28,11 +28,14 @@ export default function HeaderMobile({
   return (
     <header
       aria-expanded={menuOpen}
-      className="relative top-0 left-0 w-full z-50 border-b shadow-xs p-4 bg-white"
+      className="flex items-center justify-between relative top-0 left-0 w-full z-50 border-b shadow-xs p-4 bg-white"
     >
       <button onClick={() => setMenuOpen(!menuOpen)} className="cursor-pointer">
         {menuOpen ? <X /> : <Menu />}
       </button>
+      <Link href={"/notifications"}>
+        <Bell className="w-5 h-5" />
+      </Link>
       {menuOpen && (
         <nav className="absolute top-20 left-0 w-full flex flex-col gap-4 p-4 border-2 rounded-md shadow-xs z-100 bg-white">
           <Link href={"/"} className="text-md font-medium">
