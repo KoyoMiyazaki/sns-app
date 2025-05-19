@@ -27,7 +27,20 @@ export async function middleware(req: NextRequest) {
     data: { session },
   } = await supabase.auth.getSession();
 
-  if (req.nextUrl.pathname.startsWith("/feed") && !session) {
+  // 管理画面は isAdmin=true のみ
+  if (
+    req.nextUrl.pathname.startsWith("/admin") &&
+    !session?.user?.user_metadata?.isAdmin
+  ) {
+    return NextResponse.redirect(new URL("/", req.url));
+  }
+
+  // ログイン必須ページ
+  if (
+    (req.nextUrl.pathname.startsWith("/feed") ||
+      req.nextUrl.pathname.startsWith("/profile")) &&
+    !session
+  ) {
     const loginUrl = req.nextUrl.clone();
     loginUrl.pathname = "/login";
     return NextResponse.redirect(loginUrl);
@@ -37,5 +50,5 @@ export async function middleware(req: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/feed/:path*"],
+  matcher: ["/feed/:path*", "/profile/:path*", "/admin/:path*"],
 };
