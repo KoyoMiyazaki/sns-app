@@ -35,8 +35,6 @@ export default function AdminUsersClient() {
     fetchUsers();
   }, []);
 
-  console.log(users);
-
   return (
     <div className="flex flex-col gap-8 w-[350px] md:w-[400px]">
       <h1 className="text-2xl font-bold">ユーザー一覧</h1>
