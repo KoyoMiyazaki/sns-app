@@ -1,9 +1,25 @@
 "use client";
 
+import Link from "next/link";
+
 export default function AdminClient() {
   return (
-    <div>
-      <div>AdminClient</div>
+    <div className="flex flex-col gap-8 w-[350px] md:w-[400px]">
+      <h1 className="text-2xl font-bold">管理画面</h1>
+      <div className="flex flex-col divide-y border-y">
+        <Link
+          href={"/admin/users"}
+          className="flex items-center gap-2 px-2 py-4 hover:bg-blue-50"
+        >
+          ユーザー一覧
+        </Link>
+        <Link
+          href={"/admin/posts"}
+          className="flex items-center gap-2 px-2 py-4 hover:bg-blue-50"
+        >
+          投稿一覧
+        </Link>
+      </div>
     </div>
   );
 }
