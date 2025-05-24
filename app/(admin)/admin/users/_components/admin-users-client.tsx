@@ -1,9 +1,12 @@
 "use client";
 
 import EmptyComponent from "@/components/empty-component";
+import { Button, buttonVariants } from "@/components/ui/button";
 import UserSkeleton from "@/components/user-skeleton";
 import { supabase } from "@/lib/supabase-client";
+import { cn } from "@/lib/utils";
 import { UserWithMeta } from "@/types/user";
+import { Ban, Unlock } from "lucide-react";
 import { useEffect, useState } from "react";
 
 export default function AdminUsersClient() {
@@ -35,6 +38,28 @@ export default function AdminUsersClient() {
     fetchUsers();
   }, []);
 
+  const handleBan = async () => {
+    const {
+      data: { session },
+    } = await supabase.auth.getSession();
+    await fetch(`/api/admin/users/${session?.user.id}/ban`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ isBanned: true }),
+    });
+  };
+
+  const handleUnBan = async () => {
+    const {
+      data: { session },
+    } = await supabase.auth.getSession();
+    await fetch(`/api/admin/users/${session?.user.id}/ban`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ isBanned: false }),
+    });
+  };
+
   return (
     <div className="flex flex-col gap-8 w-[350px] md:w-[400px]">
       <h1 className="text-2xl font-bold">ユーザー一覧</h1>
@@ -51,7 +76,7 @@ export default function AdminUsersClient() {
           {users.map((user) => (
             <div
               key={user.id}
-              className="flex items-center gap-2 px-2 py-4 hover:bg-blue-50"
+              className="flex items-center justify-between gap-2 px-2 py-4 hover:bg-blue-50"
             >
               <div className="flex flex-col gap-1">
                 <p className="font-bold">
@@ -59,6 +84,16 @@ export default function AdminUsersClient() {
                   <span className="font-normal">({user.email})</span>
                 </p>
               </div>
+              <Button
+                onClick={user.isBanned ? handleUnBan : handleBan}
+                className={cn(buttonVariants({ variant: "outline" }))}
+              >
+                {user.isBanned ? (
+                  <Unlock className="w-5 h-5 text-foreground" />
+                ) : (
+                  <Ban className="w-5 h-5 text-red-500" />
+                )}
+              </Button>
             </div>
           ))}
         </div>

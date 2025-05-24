@@ -5,4 +5,5 @@ export interface User {
 
 export interface UserWithMeta extends User {
   email: string;
+  isBanned: boolean;
 }

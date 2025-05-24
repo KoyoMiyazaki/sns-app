@@ -46,6 +46,7 @@ export async function GET(req: Request) {
     id: user.id,
     email: user.email,
     username: user.user_metadata?.username ?? "",
+    isBanned: user.user_metadata?.isBanned || false,
   }));
 
   return NextResponse.json(simplifiedUsers);
