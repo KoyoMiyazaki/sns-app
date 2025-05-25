@@ -1,13 +1,12 @@
 "use client";
 
 import EmptyComponent from "@/components/empty-component";
-import { Button, buttonVariants } from "@/components/ui/button";
 import UserSkeleton from "@/components/user-skeleton";
 import { supabase } from "@/lib/supabase-client";
-import { cn } from "@/lib/utils";
 import { UserWithMeta } from "@/types/user";
 import { Ban, Unlock } from "lucide-react";
 import { useEffect, useState } from "react";
+import ConfirmActionDialog from "./confirm-action-dialog";
 
 export default function AdminUsersClient() {
   const [users, setUsers] = useState<UserWithMeta[]>([]);
@@ -38,28 +37,6 @@ export default function AdminUsersClient() {
     fetchUsers();
   }, []);
 
-  const handleBan = async () => {
-    const {
-      data: { session },
-    } = await supabase.auth.getSession();
-    await fetch(`/api/admin/users/${session?.user.id}/ban`, {
-      method: "PATCH",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ isBanned: true }),
-    });
-  };
-
-  const handleUnBan = async () => {
-    const {
-      data: { session },
-    } = await supabase.auth.getSession();
-    await fetch(`/api/admin/users/${session?.user.id}/ban`, {
-      method: "PATCH",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ isBanned: false }),
-    });
-  };
-
   return (
     <div className="flex flex-col gap-8 w-[350px] md:w-[400px]">
       <h1 className="text-2xl font-bold">ユーザー一覧</h1>
@@ -84,16 +61,35 @@ export default function AdminUsersClient() {
                   <span className="font-normal">({user.email})</span>
                 </p>
               </div>
-              <Button
-                onClick={user.isBanned ? handleUnBan : handleBan}
-                className={cn(buttonVariants({ variant: "outline" }))}
-              >
-                {user.isBanned ? (
-                  <Unlock className="w-5 h-5 text-foreground" />
-                ) : (
-                  <Ban className="w-5 h-5 text-red-500" />
-                )}
-              </Button>
+              {user.isBanned ? (
+                <ConfirmActionDialog
+                  user={user}
+                  icon={Unlock}
+                  iconClassName={"text-foreground"}
+                  title={"このユーザーの凍結を解除しますか？"}
+                  handleClick={async (user) => {
+                    await fetch(`/api/admin/users/${user.id}/ban`, {
+                      method: "PATCH",
+                      headers: { "Content-Type": "application/json" },
+                      body: JSON.stringify({ isBanned: false }),
+                    });
+                  }}
+                />
+              ) : (
+                <ConfirmActionDialog
+                  user={user}
+                  icon={Ban}
+                  iconClassName={"text-red-500"}
+                  title={"このユーザーを凍結しますか？"}
+                  handleClick={async (user) => {
+                    await fetch(`/api/admin/users/${user.id}/ban`, {
+                      method: "PATCH",
+                      headers: { "Content-Type": "application/json" },
+                      body: JSON.stringify({ isBanned: true }),
+                    });
+                  }}
+                />
+              )}
             </div>
           ))}
         </div>
