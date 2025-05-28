@@ -46,6 +46,13 @@ export async function middleware(req: NextRequest) {
     return NextResponse.redirect(loginUrl);
   }
 
+  // BANされているユーザーの場合はBAN用のページにリダイレクト
+  if (session?.user.user_metadata?.isBanned) {
+    const url = req.nextUrl.clone();
+    url.pathname = "/banned";
+    return NextResponse.redirect(url);
+  }
+
   return res;
 }
 
