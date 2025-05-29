@@ -1500,6 +1500,37 @@ export namespace Prisma {
 
 
   /**
+   * Count Type CommentCountOutputType
+   */
+
+  export type CommentCountOutputType = {
+    replies: number
+  }
+
+  export type CommentCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    replies?: boolean | CommentCountOutputTypeCountRepliesArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * CommentCountOutputType without action
+   */
+  export type CommentCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CommentCountOutputType
+     */
+    select?: CommentCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * CommentCountOutputType without action
+   */
+  export type CommentCountOutputTypeCountRepliesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: CommentWhereInput
+  }
+
+
+  /**
    * Count Type UserCountOutputType
    */
 
@@ -4815,6 +4846,7 @@ export namespace Prisma {
     content: string | null
     userId: string | null
     postId: string | null
+    parentCommentId: string | null
     createdAt: Date | null
   }
 
@@ -4823,6 +4855,7 @@ export namespace Prisma {
     content: string | null
     userId: string | null
     postId: string | null
+    parentCommentId: string | null
     createdAt: Date | null
   }
 
@@ -4831,6 +4864,7 @@ export namespace Prisma {
     content: number
     userId: number
     postId: number
+    parentCommentId: number
     createdAt: number
     _all: number
   }
@@ -4841,6 +4875,7 @@ export namespace Prisma {
     content?: true
     userId?: true
     postId?: true
+    parentCommentId?: true
     createdAt?: true
   }
 
@@ -4849,6 +4884,7 @@ export namespace Prisma {
     content?: true
     userId?: true
     postId?: true
+    parentCommentId?: true
     createdAt?: true
   }
 
@@ -4857,6 +4893,7 @@ export namespace Prisma {
     content?: true
     userId?: true
     postId?: true
+    parentCommentId?: true
     createdAt?: true
     _all?: true
   }
@@ -4938,6 +4975,7 @@ export namespace Prisma {
     content: string
     userId: string
     postId: string
+    parentCommentId: string | null
     createdAt: Date
     _count: CommentCountAggregateOutputType | null
     _min: CommentMinAggregateOutputType | null
@@ -4963,9 +5001,13 @@ export namespace Prisma {
     content?: boolean
     userId?: boolean
     postId?: boolean
+    parentCommentId?: boolean
     createdAt?: boolean
+    parentComment?: boolean | Comment$parentCommentArgs<ExtArgs>
+    replies?: boolean | Comment$repliesArgs<ExtArgs>
     user?: boolean | UserDefaultArgs<ExtArgs>
     post?: boolean | PostDefaultArgs<ExtArgs>
+    _count?: boolean | CommentCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["comment"]>
 
   export type CommentSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -4973,7 +5015,9 @@ export namespace Prisma {
     content?: boolean
     userId?: boolean
     postId?: boolean
+    parentCommentId?: boolean
     createdAt?: boolean
+    parentComment?: boolean | Comment$parentCommentArgs<ExtArgs>
     user?: boolean | UserDefaultArgs<ExtArgs>
     post?: boolean | PostDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["comment"]>
@@ -4983,7 +5027,9 @@ export namespace Prisma {
     content?: boolean
     userId?: boolean
     postId?: boolean
+    parentCommentId?: boolean
     createdAt?: boolean
+    parentComment?: boolean | Comment$parentCommentArgs<ExtArgs>
     user?: boolean | UserDefaultArgs<ExtArgs>
     post?: boolean | PostDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["comment"]>
@@ -4993,19 +5039,25 @@ export namespace Prisma {
     content?: boolean
     userId?: boolean
     postId?: boolean
+    parentCommentId?: boolean
     createdAt?: boolean
   }
 
-  export type CommentOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "content" | "userId" | "postId" | "createdAt", ExtArgs["result"]["comment"]>
+  export type CommentOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "content" | "userId" | "postId" | "parentCommentId" | "createdAt", ExtArgs["result"]["comment"]>
   export type CommentInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    parentComment?: boolean | Comment$parentCommentArgs<ExtArgs>
+    replies?: boolean | Comment$repliesArgs<ExtArgs>
     user?: boolean | UserDefaultArgs<ExtArgs>
     post?: boolean | PostDefaultArgs<ExtArgs>
+    _count?: boolean | CommentCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type CommentIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    parentComment?: boolean | Comment$parentCommentArgs<ExtArgs>
     user?: boolean | UserDefaultArgs<ExtArgs>
     post?: boolean | PostDefaultArgs<ExtArgs>
   }
   export type CommentIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    parentComment?: boolean | Comment$parentCommentArgs<ExtArgs>
     user?: boolean | UserDefaultArgs<ExtArgs>
     post?: boolean | PostDefaultArgs<ExtArgs>
   }
@@ -5013,6 +5065,8 @@ export namespace Prisma {
   export type $CommentPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Comment"
     objects: {
+      parentComment: Prisma.$CommentPayload<ExtArgs> | null
+      replies: Prisma.$CommentPayload<ExtArgs>[]
       user: Prisma.$UserPayload<ExtArgs>
       post: Prisma.$PostPayload<ExtArgs>
     }
@@ -5021,6 +5075,7 @@ export namespace Prisma {
       content: string
       userId: string
       postId: string
+      parentCommentId: string | null
       createdAt: Date
     }, ExtArgs["result"]["comment"]>
     composites: {}
@@ -5416,6 +5471,8 @@ export namespace Prisma {
    */
   export interface Prisma__CommentClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
+    parentComment<T extends Comment$parentCommentArgs<ExtArgs> = {}>(args?: Subset<T, Comment$parentCommentArgs<ExtArgs>>): Prisma__CommentClient<$Result.GetResult<Prisma.$CommentPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    replies<T extends Comment$repliesArgs<ExtArgs> = {}>(args?: Subset<T, Comment$repliesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CommentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     post<T extends PostDefaultArgs<ExtArgs> = {}>(args?: Subset<T, PostDefaultArgs<ExtArgs>>): Prisma__PostClient<$Result.GetResult<Prisma.$PostPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     /**
@@ -5451,6 +5508,7 @@ export namespace Prisma {
     readonly content: FieldRef<"Comment", 'String'>
     readonly userId: FieldRef<"Comment", 'String'>
     readonly postId: FieldRef<"Comment", 'String'>
+    readonly parentCommentId: FieldRef<"Comment", 'String'>
     readonly createdAt: FieldRef<"Comment", 'DateTime'>
   }
     
@@ -5845,6 +5903,49 @@ export namespace Prisma {
      * Limit how many Comments to delete.
      */
     limit?: number
+  }
+
+  /**
+   * Comment.parentComment
+   */
+  export type Comment$parentCommentArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Comment
+     */
+    select?: CommentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Comment
+     */
+    omit?: CommentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CommentInclude<ExtArgs> | null
+    where?: CommentWhereInput
+  }
+
+  /**
+   * Comment.replies
+   */
+  export type Comment$repliesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Comment
+     */
+    select?: CommentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Comment
+     */
+    omit?: CommentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CommentInclude<ExtArgs> | null
+    where?: CommentWhereInput
+    orderBy?: CommentOrderByWithRelationInput | CommentOrderByWithRelationInput[]
+    cursor?: CommentWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: CommentScalarFieldEnum | CommentScalarFieldEnum[]
   }
 
   /**
@@ -9227,6 +9328,7 @@ export namespace Prisma {
     content: 'content',
     userId: 'userId',
     postId: 'postId',
+    parentCommentId: 'parentCommentId',
     createdAt: 'createdAt'
   };
 
@@ -9504,7 +9606,10 @@ export namespace Prisma {
     content?: StringFilter<"Comment"> | string
     userId?: StringFilter<"Comment"> | string
     postId?: StringFilter<"Comment"> | string
+    parentCommentId?: StringNullableFilter<"Comment"> | string | null
     createdAt?: DateTimeFilter<"Comment"> | Date | string
+    parentComment?: XOR<CommentNullableScalarRelationFilter, CommentWhereInput> | null
+    replies?: CommentListRelationFilter
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
     post?: XOR<PostScalarRelationFilter, PostWhereInput>
   }
@@ -9514,7 +9619,10 @@ export namespace Prisma {
     content?: SortOrder
     userId?: SortOrder
     postId?: SortOrder
+    parentCommentId?: SortOrderInput | SortOrder
     createdAt?: SortOrder
+    parentComment?: CommentOrderByWithRelationInput
+    replies?: CommentOrderByRelationAggregateInput
     user?: UserOrderByWithRelationInput
     post?: PostOrderByWithRelationInput
   }
@@ -9527,7 +9635,10 @@ export namespace Prisma {
     content?: StringFilter<"Comment"> | string
     userId?: StringFilter<"Comment"> | string
     postId?: StringFilter<"Comment"> | string
+    parentCommentId?: StringNullableFilter<"Comment"> | string | null
     createdAt?: DateTimeFilter<"Comment"> | Date | string
+    parentComment?: XOR<CommentNullableScalarRelationFilter, CommentWhereInput> | null
+    replies?: CommentListRelationFilter
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
     post?: XOR<PostScalarRelationFilter, PostWhereInput>
   }, "id">
@@ -9537,6 +9648,7 @@ export namespace Prisma {
     content?: SortOrder
     userId?: SortOrder
     postId?: SortOrder
+    parentCommentId?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     _count?: CommentCountOrderByAggregateInput
     _max?: CommentMaxOrderByAggregateInput
@@ -9551,6 +9663,7 @@ export namespace Prisma {
     content?: StringWithAggregatesFilter<"Comment"> | string
     userId?: StringWithAggregatesFilter<"Comment"> | string
     postId?: StringWithAggregatesFilter<"Comment"> | string
+    parentCommentId?: StringNullableWithAggregatesFilter<"Comment"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"Comment"> | Date | string
   }
 
@@ -9879,6 +9992,8 @@ export namespace Prisma {
     id?: string
     content: string
     createdAt?: Date | string
+    parentComment?: CommentCreateNestedOneWithoutRepliesInput
+    replies?: CommentCreateNestedManyWithoutParentCommentInput
     user: UserCreateNestedOneWithoutCommentInput
     post: PostCreateNestedOneWithoutCommentsInput
   }
@@ -9888,13 +10003,17 @@ export namespace Prisma {
     content: string
     userId: string
     postId: string
+    parentCommentId?: string | null
     createdAt?: Date | string
+    replies?: CommentUncheckedCreateNestedManyWithoutParentCommentInput
   }
 
   export type CommentUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     content?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    parentComment?: CommentUpdateOneWithoutRepliesNestedInput
+    replies?: CommentUpdateManyWithoutParentCommentNestedInput
     user?: UserUpdateOneRequiredWithoutCommentNestedInput
     post?: PostUpdateOneRequiredWithoutCommentsNestedInput
   }
@@ -9904,7 +10023,9 @@ export namespace Prisma {
     content?: StringFieldUpdateOperationsInput | string
     userId?: StringFieldUpdateOperationsInput | string
     postId?: StringFieldUpdateOperationsInput | string
+    parentCommentId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    replies?: CommentUncheckedUpdateManyWithoutParentCommentNestedInput
   }
 
   export type CommentCreateManyInput = {
@@ -9912,6 +10033,7 @@ export namespace Prisma {
     content: string
     userId: string
     postId: string
+    parentCommentId?: string | null
     createdAt?: Date | string
   }
 
@@ -9926,6 +10048,7 @@ export namespace Prisma {
     content?: StringFieldUpdateOperationsInput | string
     userId?: StringFieldUpdateOperationsInput | string
     postId?: StringFieldUpdateOperationsInput | string
+    parentCommentId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -10308,11 +10431,17 @@ export namespace Prisma {
     tagId?: SortOrder
   }
 
+  export type CommentNullableScalarRelationFilter = {
+    is?: CommentWhereInput | null
+    isNot?: CommentWhereInput | null
+  }
+
   export type CommentCountOrderByAggregateInput = {
     id?: SortOrder
     content?: SortOrder
     userId?: SortOrder
     postId?: SortOrder
+    parentCommentId?: SortOrder
     createdAt?: SortOrder
   }
 
@@ -10321,6 +10450,7 @@ export namespace Prisma {
     content?: SortOrder
     userId?: SortOrder
     postId?: SortOrder
+    parentCommentId?: SortOrder
     createdAt?: SortOrder
   }
 
@@ -10329,6 +10459,7 @@ export namespace Prisma {
     content?: SortOrder
     userId?: SortOrder
     postId?: SortOrder
+    parentCommentId?: SortOrder
     createdAt?: SortOrder
   }
 
@@ -10695,6 +10826,19 @@ export namespace Prisma {
     update?: XOR<XOR<TagUpdateToOneWithWhereWithoutPostsInput, TagUpdateWithoutPostsInput>, TagUncheckedUpdateWithoutPostsInput>
   }
 
+  export type CommentCreateNestedOneWithoutRepliesInput = {
+    create?: XOR<CommentCreateWithoutRepliesInput, CommentUncheckedCreateWithoutRepliesInput>
+    connectOrCreate?: CommentCreateOrConnectWithoutRepliesInput
+    connect?: CommentWhereUniqueInput
+  }
+
+  export type CommentCreateNestedManyWithoutParentCommentInput = {
+    create?: XOR<CommentCreateWithoutParentCommentInput, CommentUncheckedCreateWithoutParentCommentInput> | CommentCreateWithoutParentCommentInput[] | CommentUncheckedCreateWithoutParentCommentInput[]
+    connectOrCreate?: CommentCreateOrConnectWithoutParentCommentInput | CommentCreateOrConnectWithoutParentCommentInput[]
+    createMany?: CommentCreateManyParentCommentInputEnvelope
+    connect?: CommentWhereUniqueInput | CommentWhereUniqueInput[]
+  }
+
   export type UserCreateNestedOneWithoutCommentInput = {
     create?: XOR<UserCreateWithoutCommentInput, UserUncheckedCreateWithoutCommentInput>
     connectOrCreate?: UserCreateOrConnectWithoutCommentInput
@@ -10705,6 +10849,37 @@ export namespace Prisma {
     create?: XOR<PostCreateWithoutCommentsInput, PostUncheckedCreateWithoutCommentsInput>
     connectOrCreate?: PostCreateOrConnectWithoutCommentsInput
     connect?: PostWhereUniqueInput
+  }
+
+  export type CommentUncheckedCreateNestedManyWithoutParentCommentInput = {
+    create?: XOR<CommentCreateWithoutParentCommentInput, CommentUncheckedCreateWithoutParentCommentInput> | CommentCreateWithoutParentCommentInput[] | CommentUncheckedCreateWithoutParentCommentInput[]
+    connectOrCreate?: CommentCreateOrConnectWithoutParentCommentInput | CommentCreateOrConnectWithoutParentCommentInput[]
+    createMany?: CommentCreateManyParentCommentInputEnvelope
+    connect?: CommentWhereUniqueInput | CommentWhereUniqueInput[]
+  }
+
+  export type CommentUpdateOneWithoutRepliesNestedInput = {
+    create?: XOR<CommentCreateWithoutRepliesInput, CommentUncheckedCreateWithoutRepliesInput>
+    connectOrCreate?: CommentCreateOrConnectWithoutRepliesInput
+    upsert?: CommentUpsertWithoutRepliesInput
+    disconnect?: CommentWhereInput | boolean
+    delete?: CommentWhereInput | boolean
+    connect?: CommentWhereUniqueInput
+    update?: XOR<XOR<CommentUpdateToOneWithWhereWithoutRepliesInput, CommentUpdateWithoutRepliesInput>, CommentUncheckedUpdateWithoutRepliesInput>
+  }
+
+  export type CommentUpdateManyWithoutParentCommentNestedInput = {
+    create?: XOR<CommentCreateWithoutParentCommentInput, CommentUncheckedCreateWithoutParentCommentInput> | CommentCreateWithoutParentCommentInput[] | CommentUncheckedCreateWithoutParentCommentInput[]
+    connectOrCreate?: CommentCreateOrConnectWithoutParentCommentInput | CommentCreateOrConnectWithoutParentCommentInput[]
+    upsert?: CommentUpsertWithWhereUniqueWithoutParentCommentInput | CommentUpsertWithWhereUniqueWithoutParentCommentInput[]
+    createMany?: CommentCreateManyParentCommentInputEnvelope
+    set?: CommentWhereUniqueInput | CommentWhereUniqueInput[]
+    disconnect?: CommentWhereUniqueInput | CommentWhereUniqueInput[]
+    delete?: CommentWhereUniqueInput | CommentWhereUniqueInput[]
+    connect?: CommentWhereUniqueInput | CommentWhereUniqueInput[]
+    update?: CommentUpdateWithWhereUniqueWithoutParentCommentInput | CommentUpdateWithWhereUniqueWithoutParentCommentInput[]
+    updateMany?: CommentUpdateManyWithWhereWithoutParentCommentInput | CommentUpdateManyWithWhereWithoutParentCommentInput[]
+    deleteMany?: CommentScalarWhereInput | CommentScalarWhereInput[]
   }
 
   export type UserUpdateOneRequiredWithoutCommentNestedInput = {
@@ -10721,6 +10896,20 @@ export namespace Prisma {
     upsert?: PostUpsertWithoutCommentsInput
     connect?: PostWhereUniqueInput
     update?: XOR<XOR<PostUpdateToOneWithWhereWithoutCommentsInput, PostUpdateWithoutCommentsInput>, PostUncheckedUpdateWithoutCommentsInput>
+  }
+
+  export type CommentUncheckedUpdateManyWithoutParentCommentNestedInput = {
+    create?: XOR<CommentCreateWithoutParentCommentInput, CommentUncheckedCreateWithoutParentCommentInput> | CommentCreateWithoutParentCommentInput[] | CommentUncheckedCreateWithoutParentCommentInput[]
+    connectOrCreate?: CommentCreateOrConnectWithoutParentCommentInput | CommentCreateOrConnectWithoutParentCommentInput[]
+    upsert?: CommentUpsertWithWhereUniqueWithoutParentCommentInput | CommentUpsertWithWhereUniqueWithoutParentCommentInput[]
+    createMany?: CommentCreateManyParentCommentInputEnvelope
+    set?: CommentWhereUniqueInput | CommentWhereUniqueInput[]
+    disconnect?: CommentWhereUniqueInput | CommentWhereUniqueInput[]
+    delete?: CommentWhereUniqueInput | CommentWhereUniqueInput[]
+    connect?: CommentWhereUniqueInput | CommentWhereUniqueInput[]
+    update?: CommentUpdateWithWhereUniqueWithoutParentCommentInput | CommentUpdateWithWhereUniqueWithoutParentCommentInput[]
+    updateMany?: CommentUpdateManyWithWhereWithoutParentCommentInput | CommentUpdateManyWithWhereWithoutParentCommentInput[]
+    deleteMany?: CommentScalarWhereInput | CommentScalarWhereInput[]
   }
 
   export type PostCreateNestedOneWithoutLikesInput = {
@@ -11153,6 +11342,8 @@ export namespace Prisma {
     id?: string
     content: string
     createdAt?: Date | string
+    parentComment?: CommentCreateNestedOneWithoutRepliesInput
+    replies?: CommentCreateNestedManyWithoutParentCommentInput
     user: UserCreateNestedOneWithoutCommentInput
   }
 
@@ -11160,7 +11351,9 @@ export namespace Prisma {
     id?: string
     content: string
     userId: string
+    parentCommentId?: string | null
     createdAt?: Date | string
+    replies?: CommentUncheckedCreateNestedManyWithoutParentCommentInput
   }
 
   export type CommentCreateOrConnectWithoutPostInput = {
@@ -11294,6 +11487,7 @@ export namespace Prisma {
     content?: StringFilter<"Comment"> | string
     userId?: StringFilter<"Comment"> | string
     postId?: StringFilter<"Comment"> | string
+    parentCommentId?: StringNullableFilter<"Comment"> | string | null
     createdAt?: DateTimeFilter<"Comment"> | Date | string
   }
 
@@ -11511,6 +11705,57 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
   }
 
+  export type CommentCreateWithoutRepliesInput = {
+    id?: string
+    content: string
+    createdAt?: Date | string
+    parentComment?: CommentCreateNestedOneWithoutRepliesInput
+    user: UserCreateNestedOneWithoutCommentInput
+    post: PostCreateNestedOneWithoutCommentsInput
+  }
+
+  export type CommentUncheckedCreateWithoutRepliesInput = {
+    id?: string
+    content: string
+    userId: string
+    postId: string
+    parentCommentId?: string | null
+    createdAt?: Date | string
+  }
+
+  export type CommentCreateOrConnectWithoutRepliesInput = {
+    where: CommentWhereUniqueInput
+    create: XOR<CommentCreateWithoutRepliesInput, CommentUncheckedCreateWithoutRepliesInput>
+  }
+
+  export type CommentCreateWithoutParentCommentInput = {
+    id?: string
+    content: string
+    createdAt?: Date | string
+    replies?: CommentCreateNestedManyWithoutParentCommentInput
+    user: UserCreateNestedOneWithoutCommentInput
+    post: PostCreateNestedOneWithoutCommentsInput
+  }
+
+  export type CommentUncheckedCreateWithoutParentCommentInput = {
+    id?: string
+    content: string
+    userId: string
+    postId: string
+    createdAt?: Date | string
+    replies?: CommentUncheckedCreateNestedManyWithoutParentCommentInput
+  }
+
+  export type CommentCreateOrConnectWithoutParentCommentInput = {
+    where: CommentWhereUniqueInput
+    create: XOR<CommentCreateWithoutParentCommentInput, CommentUncheckedCreateWithoutParentCommentInput>
+  }
+
+  export type CommentCreateManyParentCommentInputEnvelope = {
+    data: CommentCreateManyParentCommentInput | CommentCreateManyParentCommentInput[]
+    skipDuplicates?: boolean
+  }
+
   export type UserCreateWithoutCommentInput = {
     id: string
     username?: string | null
@@ -11559,6 +11804,51 @@ export namespace Prisma {
   export type PostCreateOrConnectWithoutCommentsInput = {
     where: PostWhereUniqueInput
     create: XOR<PostCreateWithoutCommentsInput, PostUncheckedCreateWithoutCommentsInput>
+  }
+
+  export type CommentUpsertWithoutRepliesInput = {
+    update: XOR<CommentUpdateWithoutRepliesInput, CommentUncheckedUpdateWithoutRepliesInput>
+    create: XOR<CommentCreateWithoutRepliesInput, CommentUncheckedCreateWithoutRepliesInput>
+    where?: CommentWhereInput
+  }
+
+  export type CommentUpdateToOneWithWhereWithoutRepliesInput = {
+    where?: CommentWhereInput
+    data: XOR<CommentUpdateWithoutRepliesInput, CommentUncheckedUpdateWithoutRepliesInput>
+  }
+
+  export type CommentUpdateWithoutRepliesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    content?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    parentComment?: CommentUpdateOneWithoutRepliesNestedInput
+    user?: UserUpdateOneRequiredWithoutCommentNestedInput
+    post?: PostUpdateOneRequiredWithoutCommentsNestedInput
+  }
+
+  export type CommentUncheckedUpdateWithoutRepliesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    content?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    postId?: StringFieldUpdateOperationsInput | string
+    parentCommentId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type CommentUpsertWithWhereUniqueWithoutParentCommentInput = {
+    where: CommentWhereUniqueInput
+    update: XOR<CommentUpdateWithoutParentCommentInput, CommentUncheckedUpdateWithoutParentCommentInput>
+    create: XOR<CommentCreateWithoutParentCommentInput, CommentUncheckedCreateWithoutParentCommentInput>
+  }
+
+  export type CommentUpdateWithWhereUniqueWithoutParentCommentInput = {
+    where: CommentWhereUniqueInput
+    data: XOR<CommentUpdateWithoutParentCommentInput, CommentUncheckedUpdateWithoutParentCommentInput>
+  }
+
+  export type CommentUpdateManyWithWhereWithoutParentCommentInput = {
+    where: CommentScalarWhereInput
+    data: XOR<CommentUpdateManyMutationInput, CommentUncheckedUpdateManyWithoutParentCommentInput>
   }
 
   export type UserUpsertWithoutCommentInput = {
@@ -11935,6 +12225,8 @@ export namespace Prisma {
     id?: string
     content: string
     createdAt?: Date | string
+    parentComment?: CommentCreateNestedOneWithoutRepliesInput
+    replies?: CommentCreateNestedManyWithoutParentCommentInput
     post: PostCreateNestedOneWithoutCommentsInput
   }
 
@@ -11942,7 +12234,9 @@ export namespace Prisma {
     id?: string
     content: string
     postId: string
+    parentCommentId?: string | null
     createdAt?: Date | string
+    replies?: CommentUncheckedCreateNestedManyWithoutParentCommentInput
   }
 
   export type CommentCreateOrConnectWithoutUserInput = {
@@ -12132,6 +12426,7 @@ export namespace Prisma {
     id?: string
     content: string
     userId: string
+    parentCommentId?: string | null
     createdAt?: Date | string
   }
 
@@ -12166,6 +12461,8 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     content?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    parentComment?: CommentUpdateOneWithoutRepliesNestedInput
+    replies?: CommentUpdateManyWithoutParentCommentNestedInput
     user?: UserUpdateOneRequiredWithoutCommentNestedInput
   }
 
@@ -12173,13 +12470,16 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     content?: StringFieldUpdateOperationsInput | string
     userId?: StringFieldUpdateOperationsInput | string
+    parentCommentId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    replies?: CommentUncheckedUpdateManyWithoutParentCommentNestedInput
   }
 
   export type CommentUncheckedUpdateManyWithoutPostInput = {
     id?: StringFieldUpdateOperationsInput | string
     content?: StringFieldUpdateOperationsInput | string
     userId?: StringFieldUpdateOperationsInput | string
+    parentCommentId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -12244,6 +12544,40 @@ export namespace Prisma {
     postId?: StringFieldUpdateOperationsInput | string
   }
 
+  export type CommentCreateManyParentCommentInput = {
+    id?: string
+    content: string
+    userId: string
+    postId: string
+    createdAt?: Date | string
+  }
+
+  export type CommentUpdateWithoutParentCommentInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    content?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    replies?: CommentUpdateManyWithoutParentCommentNestedInput
+    user?: UserUpdateOneRequiredWithoutCommentNestedInput
+    post?: PostUpdateOneRequiredWithoutCommentsNestedInput
+  }
+
+  export type CommentUncheckedUpdateWithoutParentCommentInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    content?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    postId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    replies?: CommentUncheckedUpdateManyWithoutParentCommentNestedInput
+  }
+
+  export type CommentUncheckedUpdateManyWithoutParentCommentInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    content?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    postId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type PostCreateManyUserInput = {
     id?: string
     content: string
@@ -12255,6 +12589,7 @@ export namespace Prisma {
     id?: string
     content: string
     postId: string
+    parentCommentId?: string | null
     createdAt?: Date | string
   }
 
@@ -12315,6 +12650,8 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     content?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    parentComment?: CommentUpdateOneWithoutRepliesNestedInput
+    replies?: CommentUpdateManyWithoutParentCommentNestedInput
     post?: PostUpdateOneRequiredWithoutCommentsNestedInput
   }
 
@@ -12322,13 +12659,16 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     content?: StringFieldUpdateOperationsInput | string
     postId?: StringFieldUpdateOperationsInput | string
+    parentCommentId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    replies?: CommentUncheckedUpdateManyWithoutParentCommentNestedInput
   }
 
   export type CommentUncheckedUpdateManyWithoutUserInput = {
     id?: StringFieldUpdateOperationsInput | string
     content?: StringFieldUpdateOperationsInput | string
     postId?: StringFieldUpdateOperationsInput | string
+    parentCommentId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
