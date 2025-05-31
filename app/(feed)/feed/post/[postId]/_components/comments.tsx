@@ -79,11 +79,8 @@ export default function Comments({ postId }: { postId: string }) {
       ) : (
         <div className="space-y-4">
           {comments.map((comment) => (
-            <>
-              <div
-                key={comment.id}
-                className="relative space-y-2 border p-4 rounded-md"
-              >
+            <div key={comment.id}>
+              <div className="relative space-y-2 border p-4 rounded-md">
                 <p className="font-bold">{comment.user.username}</p>
                 <p>{comment.content}</p>
                 <p className="text-sm text-muted-foreground">
@@ -156,7 +153,7 @@ export default function Comments({ postId }: { postId: string }) {
                   </div>
                 </form>
               )}
-            </>
+            </div>
           ))}
         </div>
       )}
