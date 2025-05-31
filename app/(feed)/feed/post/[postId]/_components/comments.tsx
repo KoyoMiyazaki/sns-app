@@ -8,12 +8,15 @@ import { supabase } from "@/lib/supabase-client";
 import { errorStyle, successStyle } from "@/lib/toast-style";
 import { cn } from "@/lib/utils";
 import { CommentWithMeta } from "@/types/comment";
+import { MessageSquareReply } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { toast } from "sonner";
 
 export default function Comments({ postId }: { postId: string }) {
   const [content, setContent] = useState<string>("");
   const [comments, setComments] = useState<CommentWithMeta[]>([]);
+  const [replyTargetId, setReplyTargetId] = useState<string | null>(null);
+  const [replyContent, setReplyContent] = useState<string>("");
 
   useEffect(() => {
     const fetchComments = async () => {
@@ -24,7 +27,7 @@ export default function Comments({ postId }: { postId: string }) {
     fetchComments();
   }, [postId]);
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleCommentSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     const { data: userData } = await supabase.auth.getUser();
@@ -35,7 +38,11 @@ export default function Comments({ postId }: { postId: string }) {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ postId, content, userId }),
+      body: JSON.stringify({
+        postId,
+        content,
+        userId,
+      }),
     });
 
     if (res.ok) {
@@ -52,7 +59,7 @@ export default function Comments({ postId }: { postId: string }) {
   return (
     <div className="flex flex-col gap-4">
       <h2 className="text-xl font-bold">コメント</h2>
-      <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+      <form onSubmit={handleCommentSubmit} className="flex flex-col gap-4">
         <div className="space-y-2">
           <Label htmlFor="content">内容</Label>
           <Textarea
@@ -72,13 +79,84 @@ export default function Comments({ postId }: { postId: string }) {
       ) : (
         <div className="space-y-4">
           {comments.map((comment) => (
-            <div key={comment.id} className="space-y-2 border p-4 rounded-md">
-              <p className="font-bold">{comment.user.username}</p>
-              <p>{comment.content}</p>
-              <p className="text-sm text-muted-foreground">
-                {new Date(comment.createdAt).toLocaleString()}
-              </p>
-            </div>
+            <>
+              <div
+                key={comment.id}
+                className="relative space-y-2 border p-4 rounded-md"
+              >
+                <p className="font-bold">{comment.user.username}</p>
+                <p>{comment.content}</p>
+                <p className="text-sm text-muted-foreground">
+                  {new Date(comment.createdAt).toLocaleString()}
+                </p>
+                <button
+                  onClick={() => setReplyTargetId(comment.id)}
+                  className="absolute bottom-4 right-4 flex gap-1 items-center text-sm border rounded-md border-blue-400 px-2 py-1 text-blue-400 cursor-pointer"
+                >
+                  <MessageSquareReply />
+                  <span>返信</span>
+                </button>
+              </div>
+              {replyTargetId === comment.id && (
+                <form
+                  onSubmit={async (e: React.FormEvent) => {
+                    e.preventDefault();
+
+                    const { data: userData } = await supabase.auth.getUser();
+                    const userId = userData.user?.id;
+
+                    const res = await fetch("/api/comments", {
+                      method: "POST",
+                      headers: {
+                        "Content-Type": "application/json",
+                      },
+                      body: JSON.stringify({
+                        postId,
+                        content: replyContent,
+                        userId,
+                        parentCommentId: comment.id,
+                      }),
+                    });
+
+                    if (res.ok) {
+                      toast.success("返信しました！", {
+                        style: successStyle,
+                      });
+                    } else {
+                      toast.error("返信できませんでした", {
+                        style: errorStyle,
+                      });
+                    }
+                  }}
+                  className="flex flex-col gap-4"
+                >
+                  <Textarea
+                    value={replyContent}
+                    onChange={(e) => setReplyContent(e.target.value)}
+                    className="h-60"
+                  />
+                  <div className="flex justify-end gap-2">
+                    <Button
+                      onClick={() => {
+                        setReplyContent("");
+                        setReplyTargetId(null);
+                      }}
+                      className={cn(
+                        buttonVariants({ size: "lg", variant: "secondary" })
+                      )}
+                    >
+                      キャンセル
+                    </Button>
+                    <Button
+                      type="submit"
+                      className={cn(buttonVariants({ size: "lg" }))}
+                    >
+                      返信する
+                    </Button>
+                  </div>
+                </form>
+              )}
+            </>
           ))}
         </div>
       )}
