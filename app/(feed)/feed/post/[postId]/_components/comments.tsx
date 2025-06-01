@@ -8,7 +8,7 @@ import { supabase } from "@/lib/supabase-client";
 import { errorStyle, successStyle } from "@/lib/toast-style";
 import { cn } from "@/lib/utils";
 import { CommentWithMeta } from "@/types/comment";
-import { MessageSquareReply } from "lucide-react";
+import { ChevronDown, ChevronUp, MessageSquareReply } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { toast } from "sonner";
 
@@ -17,6 +17,7 @@ export default function Comments({ postId }: { postId: string }) {
   const [comments, setComments] = useState<CommentWithMeta[]>([]);
   const [replyTargetId, setReplyTargetId] = useState<string | null>(null);
   const [replyContent, setReplyContent] = useState<string>("");
+  const [openReplies, setOpenReplies] = useState<Set<string>>(new Set());
 
   useEffect(() => {
     const fetchComments = async () => {
@@ -56,9 +57,18 @@ export default function Comments({ postId }: { postId: string }) {
     }
   };
 
+  const toggleReplies = (commentId: string) => {
+    setOpenReplies((prev) => {
+      const newSet = new Set(prev);
+      newSet.has(commentId) ? newSet.delete(commentId) : newSet.add(commentId);
+      return newSet;
+    });
+  };
+
   return (
     <div className="flex flex-col gap-4">
       <h2 className="text-xl font-bold">コメント</h2>
+      {/* コメント入力欄 */}
       <form onSubmit={handleCommentSubmit} className="flex flex-col gap-4">
         <div className="space-y-2">
           <Label htmlFor="content">内容</Label>
@@ -86,14 +96,50 @@ export default function Comments({ postId }: { postId: string }) {
                 <p className="text-sm text-muted-foreground">
                   {new Date(comment.createdAt).toLocaleString()}
                 </p>
-                <button
-                  onClick={() => setReplyTargetId(comment.id)}
-                  className="absolute bottom-4 right-4 flex gap-1 items-center text-sm border rounded-md border-blue-400 px-2 py-1 text-blue-400 cursor-pointer"
-                >
-                  <MessageSquareReply />
-                  <span>返信</span>
-                </button>
+                <div className="absolute bottom-4 right-4 flex items-center gap-2">
+                  <button
+                    onClick={() => setReplyTargetId(comment.id)}
+                    className="flex gap-1 items-center text-xs border rounded-md border-blue-400 p-1 text-blue-400 cursor-pointer"
+                  >
+                    <MessageSquareReply className="w-4 h-4" />
+                    <span>返信</span>
+                  </button>
+                  <button
+                    onClick={() => toggleReplies(comment.id)}
+                    className="flex gap-1 items-center text-xs border-none p-1 text-muted-foreground cursor-pointer"
+                  >
+                    {openReplies.has(comment.id) ? (
+                      <>
+                        <ChevronUp className="w-4 h-4" />
+                        <span>コメントを非表示</span>
+                      </>
+                    ) : (
+                      <>
+                        <ChevronDown className="w-4 h-4" />
+                        <span>コメントを見る</span>
+                      </>
+                    )}
+                  </button>
+                </div>
               </div>
+              {/* 返信欄 */}
+              <div className="flex flex-col items-end gap-2 mt-2">
+                {openReplies.has(comment.id) &&
+                  comment.replies.map((reply) => (
+                    <div
+                      key={reply.id}
+                      className="w-[300px] space-y-2 border p-4 rounded-md"
+                    >
+                      <p className="font-bold">{reply.user.username}</p>
+                      <p>{reply.content}</p>
+                      <p className="text-sm text-muted-foreground">
+                        {new Date(reply.createdAt).toLocaleString()}
+                      </p>
+                    </div>
+                  ))}
+              </div>
+
+              {/* 返信入力欄 */}
               {replyTargetId === comment.id && (
                 <form
                   onSubmit={async (e: React.FormEvent) => {
@@ -125,7 +171,7 @@ export default function Comments({ postId }: { postId: string }) {
                       });
                     }
                   }}
-                  className="flex flex-col gap-4"
+                  className="flex flex-col gap-4 mt-2"
                 >
                   <Textarea
                     value={replyContent}

@@ -4,10 +4,11 @@ export interface Comment {
   id: string;
   postId: string;
   userId: string;
+  user: User;
   content: string;
   createdAt: string;
 }
 
 export interface CommentWithMeta extends Comment {
-  user: User;
+  replies: Comment[];
 }
