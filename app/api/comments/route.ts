@@ -63,6 +63,9 @@ export async function POST(req: Request) {
       content,
       parentCommentId: parentCommentId ?? null,
     },
+    include: {
+      user: true,
+    },
   });
 
   if (post.userId !== userId) {
