@@ -166,6 +166,20 @@ export default function Comments({ postId }: { postId: string }) {
                     });
 
                     if (res.ok) {
+                      const newReply = await res.json();
+
+                      setComments((prev) =>
+                        prev.map((comment) =>
+                          comment.id === comment.id
+                            ? {
+                                ...comment,
+                                replies: [...comment.replies, newReply],
+                              }
+                            : comment
+                        )
+                      );
+                      setReplyContent("");
+                      setReplyTargetId(null);
                       toast.success("返信しました！", {
                         style: successStyle,
                       });
@@ -177,7 +191,9 @@ export default function Comments({ postId }: { postId: string }) {
                   }}
                   className="flex flex-col gap-4 mt-2"
                 >
+                  <Label htmlFor="reply-content">返信内容</Label>
                   <Textarea
+                    id="reply-content"
                     value={replyContent}
                     onChange={(e) => setReplyContent(e.target.value)}
                     className="h-60"
