@@ -170,7 +170,7 @@ export default function Comments({ postId }: { postId: string }) {
 
                       setComments((prev) =>
                         prev.map((comment) =>
-                          comment.id === comment.id
+                          comment.id === replyTargetId
                             ? {
                                 ...comment,
                                 replies: [...comment.replies, newReply],
