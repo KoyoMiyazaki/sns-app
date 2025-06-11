@@ -1,5 +1,6 @@
 import { PostWithMetaAndTags } from "@/types/post";
 import { MessageCircleMore } from "lucide-react";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 
 interface PostCardProps {
@@ -16,7 +17,9 @@ export default function PostCard({ post, totalComments }: PostCardProps) {
       <p className="font-bold text-sm">{post.user.username}</p>
       <p className="text-sm">{post.content}</p>
       {post.imageUrl && (
-        <img
+        <Image
+          width={500}
+          height={300}
           src={post.imageUrl}
           alt="投稿画像"
           className="rounded-md max-h-64 object-cover"

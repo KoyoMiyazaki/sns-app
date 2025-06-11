@@ -3,7 +3,7 @@ import { createClient } from "@supabase/supabase-js";
 import { headers } from "next/headers";
 import { NextResponse } from "next/server";
 
-export async function POST(req: Request) {
+export async function POST() {
   const headerStore = await headers();
   const token = headerStore.get("Authorization")?.replace("Bearer ", "");
 

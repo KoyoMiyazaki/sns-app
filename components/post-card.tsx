@@ -2,6 +2,7 @@ import { PostWithMetaAndTags } from "@/types/post";
 import { Heart, MessageCircleMore } from "lucide-react";
 import { usePathname } from "next/navigation";
 import TagsControl from "./tags-control";
+import Image from "next/image";
 
 interface PostCardProps {
   post: PostWithMetaAndTags;
@@ -25,7 +26,9 @@ export default function PostCard({
       <p className="font-bold">{post.user.username}</p>
       <p>{post.content}</p>
       {post.imageUrl && (
-        <img
+        <Image
+          width={500}
+          height={300}
           src={post.imageUrl}
           alt="投稿画像"
           className="rounded-md max-h-64 object-cover"

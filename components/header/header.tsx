@@ -24,7 +24,6 @@ export default function Header() {
       setIsLoggedIn(!!session);
 
       if (session) {
-        const token = session.access_token;
         const res = await fetch("/api/notifications/unread-count", {
           headers: {
             Authorization: `Bearer ${session?.access_token}`,

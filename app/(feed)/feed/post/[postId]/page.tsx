@@ -6,11 +6,10 @@ export const metadata: Metadata = {
 };
 
 interface PostDetailPageProps {
-  params: {
-    postId: string;
-  };
+  params: Promise<{ postId: string }>;
 }
 
 export default async function PostDetailPage({ params }: PostDetailPageProps) {
-  return <PostClient postId={params.postId} />;
+  const { postId } = await params;
+  return <PostClient postId={postId} />;
 }

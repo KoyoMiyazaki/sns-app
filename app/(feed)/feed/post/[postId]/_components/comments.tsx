@@ -64,7 +64,11 @@ export default function Comments({ postId }: { postId: string }) {
   const toggleReplies = (commentId: string) => {
     setOpenReplies((prev) => {
       const newSet = new Set(prev);
-      newSet.has(commentId) ? newSet.delete(commentId) : newSet.add(commentId);
+      if (newSet.has(commentId)) {
+        newSet.delete(commentId);
+      } else {
+        newSet.add(commentId);
+      }
       return newSet;
     });
   };

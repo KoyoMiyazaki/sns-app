@@ -14,7 +14,6 @@ import EmptyComponent from "@/components/empty-component";
 
 export default function AdminPostsClient() {
   const [posts, setPosts] = useState<PostWithMetaAndTags[]>([]);
-  const [likedPostIds, setLikedPostIds] = useState<string[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [totalPages, setTotalPages] = useState<number>(1);
   const searchParams = useSearchParams();
@@ -37,14 +36,11 @@ export default function AdminPostsClient() {
         const postIds: string[] = data.posts.map(
           (post: PostWithMetaAndTags) => post.id
         );
-        const likeRes = await fetch("/api/likes/status", {
+        await fetch("/api/likes/status", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ userId: user.id, postIds }),
         });
-
-        const likedPostIds: string[] = await likeRes.json();
-        setLikedPostIds(likedPostIds);
       } catch (error) {
         console.error("投稿取得エラー", error);
       } finally {

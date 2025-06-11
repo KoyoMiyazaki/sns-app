@@ -20,7 +20,6 @@ interface PostClientProps {
 export default function PostClient({ postId }: PostClientProps) {
   const [post, setPost] = useState<PostWithMetaAndTags | null>(null);
   const [isLiked, setIsLiked] = useState<boolean>(false);
-  const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -29,7 +28,9 @@ export default function PostClient({ postId }: PostClientProps) {
         const res = await fetch(`/api/posts/${postId}`);
         if (!res.ok) {
           const errorData = await res.json();
-          setError(errorData.message || "投稿取得に失敗しました");
+          toast.error(errorData.message || "投稿取得に失敗しました", {
+            style: errorStyle,
+          });
           return;
         }
 
@@ -37,7 +38,9 @@ export default function PostClient({ postId }: PostClientProps) {
         setPost(data);
       } catch (error) {
         console.error("通信エラー:", error);
-        setError("ネットワークエラーが発生しました");
+        toast.error("ネットワークエラーが発生しました", {
+          style: errorStyle,
+        });
       } finally {
         setLoading(false);
       }
