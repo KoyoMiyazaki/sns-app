@@ -22,8 +22,19 @@ export default function PostClient({ postId }: PostClientProps) {
   const [post, setPost] = useState<PostWithMetaAndTags | null>(null);
   const [isLiked, setIsLiked] = useState<boolean>(false);
   const [loading, setLoading] = useState(true);
+  const [userId, setUserId] = useState<string | null>(null);
 
   useEffect(() => {
+    const fetchUser = async () => {
+      const {
+        data: { user },
+        error,
+      } = await supabase.auth.getUser();
+      if (user) {
+        setUserId(user.id);
+      }
+    };
+
     const fetchPost = async () => {
       try {
         const res = await fetch(`/api/posts/${postId}`);
@@ -63,6 +74,7 @@ export default function PostClient({ postId }: PostClientProps) {
       setIsLiked(likedPostIds.includes(postId));
     };
 
+    fetchUser();
     fetchPost();
     fetchLikeStatus();
   }, [postId]);
@@ -132,7 +144,7 @@ export default function PostClient({ postId }: PostClientProps) {
       </Link>
       <div className="flex items-center justify-between">
         <h1 className="text-2xl font-bold">投稿詳細</h1>
-        <DeletePostButton postId={postId} />
+        {post?.userId === userId && <DeletePostButton postId={postId} />}
       </div>
       {loading ? <PostSkeleton /> : <PostCard post={post!} />}
       <Button
