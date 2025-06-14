@@ -28,7 +28,6 @@ export default function PostClient({ postId }: PostClientProps) {
     const fetchUser = async () => {
       const {
         data: { user },
-        error,
       } = await supabase.auth.getUser();
       if (user) {
         setUserId(user.id);
