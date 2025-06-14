@@ -5,13 +5,14 @@ import PostSkeleton from "@/components/post-skeleton";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { PostWithMetaAndTags } from "@/types/post";
-import { ChevronLeft, Heart } from "lucide-react";
+import { ChevronLeft, Heart, Trash2 } from "lucide-react";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import Comments from "./comments";
 import { supabase } from "@/lib/supabase-client";
 import { toast } from "sonner";
 import { errorStyle, successStyle } from "@/lib/toast-style";
+import { useRouter } from "next/navigation";
 
 interface PostClientProps {
   postId: string;
@@ -21,6 +22,7 @@ export default function PostClient({ postId }: PostClientProps) {
   const [post, setPost] = useState<PostWithMetaAndTags | null>(null);
   const [isLiked, setIsLiked] = useState<boolean>(false);
   const [loading, setLoading] = useState(true);
+  const router = useRouter();
 
   useEffect(() => {
     const fetchPost = async () => {
@@ -65,6 +67,31 @@ export default function PostClient({ postId }: PostClientProps) {
     fetchPost();
     fetchLikeStatus();
   }, [postId]);
+
+  const handleDeletePost = async () => {
+    try {
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
+
+      const res = await fetch(`/api/posts/${postId}`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${session?.access_token}`,
+        },
+      });
+
+      if (res.ok) {
+        toast.success("投稿を削除しました", { style: successStyle });
+        router.push("/feed");
+      } else {
+        toast.error("投稿を削除できませんでした", { style: errorStyle });
+      }
+    } catch (error) {
+      console.error("投稿削除エラー", error);
+    }
+  };
 
   const handleLikeToggle = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -129,7 +156,19 @@ export default function PostClient({ postId }: PostClientProps) {
           戻る
         </Button>
       </Link>
-      <h1 className="text-2xl font-bold">投稿詳細</h1>
+      <div className="flex items-center justify-between">
+        <h1 className="text-2xl font-bold">投稿詳細</h1>
+        <Button
+          onClick={handleDeletePost}
+          className={cn(
+            buttonVariants({ variant: "destructive" }),
+            "cursor-pointer"
+          )}
+        >
+          <Trash2 />
+          投稿を削除
+        </Button>
+      </div>
       {loading ? <PostSkeleton /> : <PostCard post={post!} />}
       <Button
         onClick={handleLikeToggle}
