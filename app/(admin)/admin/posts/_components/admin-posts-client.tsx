@@ -78,7 +78,7 @@ export default function AdminPostsClient() {
         <>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             {posts.map((post) => (
-              <Link key={post.id} href={`/admin/post/${post.id}`}>
+              <Link key={post.id} href={`/admin/posts/${post.id}`}>
                 <PostCard post={post} totalComments={post._count?.comments} />
               </Link>
             ))}
