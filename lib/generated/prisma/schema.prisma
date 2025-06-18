@@ -32,7 +32,7 @@ model PostTag {
   postId String
   tagId  String
 
-  post Post @relation(fields: [postId], references: [id])
+  post Post @relation(fields: [postId], references: [id], onDelete: Cascade)
   tag  Tag  @relation(fields: [tagId], references: [id])
 
   @@id([postId, tagId])
@@ -49,7 +49,7 @@ model Comment {
   createdAt       DateTime  @default(now())
 
   user User @relation(fields: [userId], references: [id])
-  post Post @relation(fields: [postId], references: [id])
+  post Post @relation(fields: [postId], references: [id], onDelete: Cascade)
 }
 
 model Like {
@@ -58,7 +58,7 @@ model Like {
   postId    String
   createdAt DateTime @default(now())
 
-  post Post @relation(fields: [postId], references: [id])
+  post Post @relation(fields: [postId], references: [id], onDelete: Cascade)
   user User @relation(fields: [userId], references: [id])
 
   @@unique([postId, userId])
