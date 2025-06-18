@@ -54,7 +54,7 @@ export default function AdminPostsClient() {
   return (
     <div className="flex flex-col gap-8 w-[350px] md:w-[700px]">
       <div className="flex justify-between items-center">
-        <h1 className="text-2xl font-bold">投稿一覧</h1>
+        <h1 className="text-2xl font-bold">投稿管理</h1>
       </div>
       <div className="space-y-4">
         <form method="GET">

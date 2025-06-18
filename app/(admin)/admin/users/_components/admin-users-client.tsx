@@ -39,7 +39,7 @@ export default function AdminUsersClient() {
 
   return (
     <div className="flex flex-col gap-8 w-[350px] md:w-[400px]">
-      <h1 className="text-2xl font-bold">ユーザー一覧</h1>
+      <h1 className="text-2xl font-bold">ユーザー管理</h1>
       {loading ? (
         <div className="divide-y border-y">
           {Array.from({ length: 3 }).map((_, i) => (

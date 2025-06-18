@@ -11,13 +11,13 @@ export default function AdminClient() {
           href={"/admin/users"}
           className="flex items-center gap-2 px-2 py-4 hover:bg-blue-50"
         >
-          ユーザー一覧
+          ユーザー管理
         </Link>
         <Link
           href={"/admin/posts"}
           className="flex items-center gap-2 px-2 py-4 hover:bg-blue-50"
         >
-          投稿一覧
+          投稿管理
         </Link>
       </div>
     </div>
