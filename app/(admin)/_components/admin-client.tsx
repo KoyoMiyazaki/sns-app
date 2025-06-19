@@ -19,6 +19,12 @@ export default function AdminClient() {
         >
           投稿管理
         </Link>
+        <Link
+          href={"/admin/tags"}
+          className="flex items-center gap-2 px-2 py-4 hover:bg-blue-50"
+        >
+          タグ管理
+        </Link>
       </div>
     </div>
   );
