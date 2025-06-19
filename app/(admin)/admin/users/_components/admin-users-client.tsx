@@ -1,7 +1,7 @@
 "use client";
 
 import EmptyComponent from "@/components/empty-component";
-import UserSkeleton from "@/components/user-skeleton";
+import OneLineSkeleton from "@/components/one-line-skeleton";
 import { supabase } from "@/lib/supabase-client";
 import { UserWithMeta } from "@/types/user";
 import { Ban, Unlock } from "lucide-react";
@@ -43,7 +43,7 @@ export default function AdminUsersClient() {
       {loading ? (
         <div className="divide-y border-y">
           {Array.from({ length: 3 }).map((_, i) => (
-            <UserSkeleton key={i} />
+            <OneLineSkeleton key={i} />
           ))}
         </div>
       ) : users.length === 0 ? (
