@@ -4,9 +4,12 @@ import EmptyComponent from "@/components/empty-component";
 import OneLineSkeleton from "@/components/one-line-skeleton";
 import { supabase } from "@/lib/supabase-client";
 import { UserWithMeta } from "@/types/user";
-import { Ban, Unlock } from "lucide-react";
+import { Ban, ChevronLeft, Unlock } from "lucide-react";
 import { useEffect, useState } from "react";
 import ConfirmActionDialog from "./confirm-action-dialog";
+import Link from "next/link";
+import { Button, buttonVariants } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 
 export default function AdminUsersClient() {
   const [users, setUsers] = useState<UserWithMeta[]>([]);
@@ -39,6 +42,17 @@ export default function AdminUsersClient() {
 
   return (
     <div className="flex flex-col gap-8 w-[350px] md:w-[400px]">
+      <Link href={"/admin"}>
+        <Button
+          className={cn(
+            buttonVariants({ variant: "secondary", size: "sm" }),
+            "cursor-pointer"
+          )}
+        >
+          <ChevronLeft />
+          戻る
+        </Button>
+      </Link>
       <h1 className="text-2xl font-bold">ユーザー管理</h1>
       {loading ? (
         <div className="divide-y border-y">

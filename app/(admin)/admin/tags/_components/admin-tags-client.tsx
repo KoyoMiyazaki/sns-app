@@ -5,6 +5,10 @@ import { useEffect, useState } from "react";
 import DeleteTagButton from "./delete-tag-button";
 import OneLineSkeleton from "@/components/one-line-skeleton";
 import EmptyComponent from "@/components/empty-component";
+import Link from "next/link";
+import { Button, buttonVariants } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
+import { ChevronLeft } from "lucide-react";
 
 export default function AdminTagsClient() {
   const [tags, setTags] = useState<TagType[]>([]);
@@ -28,6 +32,17 @@ export default function AdminTagsClient() {
 
   return (
     <div className="flex flex-col gap-8 w-[350px] md:w-[400px]">
+      <Link href={"/admin"}>
+        <Button
+          className={cn(
+            buttonVariants({ variant: "secondary", size: "sm" }),
+            "cursor-pointer"
+          )}
+        >
+          <ChevronLeft />
+          戻る
+        </Button>
+      </Link>
       <h1 className="text-2xl font-bold">タグ管理</h1>
       {loading ? (
         <div className="divide-y border-y">

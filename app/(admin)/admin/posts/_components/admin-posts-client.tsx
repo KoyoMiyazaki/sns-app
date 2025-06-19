@@ -11,6 +11,9 @@ import { ADMIN_PAGE_SIZE } from "@/constants/pagination";
 import { supabase } from "@/lib/supabase-client";
 import { Input } from "@/components/ui/input";
 import EmptyComponent from "@/components/empty-component";
+import { Button, buttonVariants } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
+import { ChevronLeft } from "lucide-react";
 
 export default function AdminPostsClient() {
   const [posts, setPosts] = useState<PostWithMetaAndTags[]>([]);
@@ -53,6 +56,17 @@ export default function AdminPostsClient() {
 
   return (
     <div className="flex flex-col gap-8 w-[350px] md:w-[700px]">
+      <Link href={"/admin"}>
+        <Button
+          className={cn(
+            buttonVariants({ variant: "secondary", size: "sm" }),
+            "cursor-pointer"
+          )}
+        >
+          <ChevronLeft />
+          戻る
+        </Button>
+      </Link>
       <div className="flex justify-between items-center">
         <h1 className="text-2xl font-bold">投稿管理</h1>
       </div>
